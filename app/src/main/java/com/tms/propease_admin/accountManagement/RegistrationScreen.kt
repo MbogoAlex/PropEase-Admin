@@ -153,7 +153,7 @@ fun RegistrationScreen(
                     .fillMaxWidth(),
                 onClick = { /*TODO*/ }
             ) {
-                Text(text = "Dign in")
+                Text(text = "Sign in")
             }
         }
 
