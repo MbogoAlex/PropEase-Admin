@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
 }
 
 android {
@@ -50,6 +52,56 @@ android {
 }
 
 dependencies {
+
+    // horizontal pager
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+
+    // Retrofit
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    //Gson
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    //SF
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.6.0")
+
+    //Date
+    implementation ("androidx.compose.material3:material3:1.2.0-alpha02")
+
+    //Viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
+    //Room
+    implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
+    ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
+    implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
+
+    //LiveData
+    implementation ("androidx.compose.runtime:runtime-livedata")
+
+    //Scarlet
+
+    // https://mvnrepository.com/artifact/com.tinder.scarlet/scarlet
+    implementation("com.tinder.scarlet:scarlet:0.1.12")
+
+    // https://mvnrepository.com/artifact/com.tinder.scarlet/websocket-okhttp
+    implementation("com.tinder.scarlet:websocket-okhttp:0.1.12")
+
+    // https://mvnrepository.com/artifact/com.squareup.moshi/moshi-kotlin
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+
+    // https://mvnrepository.com/artifact/com.tinder.scarlet/stream-adapter-coroutines
+    implementation("com.tinder.scarlet:stream-adapter-coroutines:0.1.12")
 
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
