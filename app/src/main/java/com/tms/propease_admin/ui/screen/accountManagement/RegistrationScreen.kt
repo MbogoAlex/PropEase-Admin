@@ -1,5 +1,6 @@
 package com.tms.propease_admin.ui.screen.accountManagement
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,23 +15,37 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tms.propease_admin.AppViewModelFactory
 import com.tms.propease_admin.R
+import com.tms.propease_admin.nav.AppNavigation
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
+import com.tms.propease_admin.utils.ExecutionStatus
 import com.tms.propease_admin.utils.InputForm
 import com.tms.propease_admin.utils.checkIfEmailIsValid
+
+object RegistrationScreenDestination: AppNavigation {
+    override val title: String = "Registration screen"
+    override val route: String = "registration-screen"
+
+}
 
 @Composable
 fun RegistrationScreenComposable(
@@ -39,13 +54,72 @@ fun RegistrationScreenComposable(
     exitApp: () -> Unit,
 ) {
     BackHandler(onBack = exitApp)
+    val context = LocalContext.current
+    val viewModel: RegistrationScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
+    val uiState by viewModel.uiState.collectAsState()
+
+    if(uiState.executionStatus == ExecutionStatus.SUCCESS) {
+        navigateToLoginScreenWithArgs(uiState.phone, uiState.password)
+        viewModel.resetRegistrationStatus()
+    } else if(uiState.executionStatus == ExecutionStatus.FAIL) {
+        Toast.makeText(context, uiState.registrationFailureMessage, Toast.LENGTH_SHORT).show()
+    }
+
     Box {
-        RegistrationScreen()
+        RegistrationScreen(
+            fname = uiState.fname,
+            lname = uiState.lname,
+            email = uiState.email,
+            password = uiState.password,
+            phoneNumber = uiState.phone,
+            registerUserButtonEnabled = uiState.buttonEnabled,
+            exitApp = exitApp,
+            onfNameChange = {
+                viewModel.updatefname(it)
+                viewModel.checkIfFieldValuesValid()
+            },
+            onlNameChange = {
+                viewModel.updatelname(it)
+                viewModel.checkIfFieldValuesValid()
+            },
+            onEmailChange = {
+                viewModel.updateEmail(it)
+                viewModel.checkIfFieldValuesValid()
+            },
+            onPhoneNumberChange = {
+                viewModel.updatePhone(it)
+                viewModel.checkIfFieldValuesValid()
+            },
+            onPasswordChange = {
+                viewModel.updatePassword(it)
+                viewModel.checkIfFieldValuesValid()
+            },
+            onRegisterUser = {
+                viewModel.registerUser()
+            },
+            executionStatus = uiState.executionStatus,
+            navigateToLoginScreenWithoutArgs = navigateToLoginScreenWithoutArgs
+        )
     }
 }
 
 @Composable
 fun RegistrationScreen(
+    fname: String,
+    lname: String,
+    email: String,
+    password: String,
+    phoneNumber: String,
+    registerUserButtonEnabled: Boolean,
+    exitApp: () -> Unit,
+    onfNameChange: (newValue: String) -> Unit,
+    onlNameChange: (newValue: String) -> Unit,
+    onEmailChange: (newValue: String) -> Unit,
+    onPhoneNumberChange: (newValue: String) -> Unit,
+    onPasswordChange: (newValue: String) -> Unit,
+    onRegisterUser: () -> Unit,
+    executionStatus: ExecutionStatus,
+    navigateToLoginScreenWithoutArgs: () -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -53,7 +127,7 @@ fun RegistrationScreen(
             .padding(16.dp)
             .fillMaxSize()
     ) {
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = exitApp) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Exit app"
@@ -70,9 +144,9 @@ fun RegistrationScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 InputForm(
-                    value = "",
+                    value = fname,
                     label = "first name",
-                    onValueChange = {},
+                    onValueChange = onfNameChange,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
                         keyboardType = KeyboardType.Text
@@ -84,9 +158,9 @@ fun RegistrationScreen(
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 InputForm(
-                    value = "",
+                    value = lname,
                     label = "last name",
-                    onValueChange = {},
+                    onValueChange = onlNameChange,
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
                         keyboardType = KeyboardType.Text
@@ -99,9 +173,9 @@ fun RegistrationScreen(
             }
             Spacer(modifier = Modifier.height(20.dp))
             InputForm(
-                value = "",
+                value = phoneNumber,
                 label = "phone number",
-                onValueChange = {},
+                onValueChange = onPhoneNumberChange,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Phone
@@ -113,9 +187,9 @@ fun RegistrationScreen(
             )
             Spacer(modifier = Modifier.height(20.dp))
             InputForm(
-                value = "",
+                value = email,
                 label = "email",
-                onValueChange = {},
+                onValueChange = onEmailChange,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Email
@@ -127,9 +201,9 @@ fun RegistrationScreen(
             )
             Spacer(modifier = Modifier.height(20.dp))
             InputForm(
-                value = "",
+                value = password,
                 label = "password",
-                onValueChange = {},
+                onValueChange = onPasswordChange,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Password
@@ -141,17 +215,22 @@ fun RegistrationScreen(
             )
             Spacer(modifier = Modifier.weight(1f))
             Button(
+                enabled = registerUserButtonEnabled && executionStatus != ExecutionStatus.LOADING,
                 modifier = Modifier
                     .fillMaxWidth(),
-                onClick = { /*TODO*/ }
+                onClick = onRegisterUser
             ) {
-                Text(text = "Register")
+                if(executionStatus == ExecutionStatus.LOADING) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(text = "Register")
+                }
             }
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onClick = { /*TODO*/ }
+                onClick = navigateToLoginScreenWithoutArgs
             ) {
                 Text(text = "Sign in")
             }
@@ -182,6 +261,22 @@ fun InputFormPreview() {
 @Composable
 fun RegistrationScreenPreview() {
     PropEaseAdminTheme {
-        RegistrationScreen()
+        RegistrationScreen(
+            fname = "",
+            lname = "",
+            email = "",
+            password = "",
+            phoneNumber = "",
+            registerUserButtonEnabled = false,
+            exitApp = { /*TODO*/ },
+            onfNameChange = {},
+            onlNameChange = {},
+            onEmailChange = {},
+            onPhoneNumberChange = {},
+            onPasswordChange = {},
+            onRegisterUser = { /*TODO*/ },
+            executionStatus = ExecutionStatus.INITIAL,
+            navigateToLoginScreenWithoutArgs = {}
+        )
     }
 }

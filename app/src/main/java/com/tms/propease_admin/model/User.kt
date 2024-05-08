@@ -20,7 +20,7 @@ data class UserProfile(
     val email: String,
     val phoneNumber: String,
     val imageUrl: String?,
-    val approvalStatus: String?,
+    val approvalStatus: String,
     val approved: Boolean,
     val roles: List<UserRole>,
     val fname: String,
@@ -44,3 +44,4 @@ data class UserResponseBody(
 data class UserDt(
     val profiles: UserProfile
 )
+
