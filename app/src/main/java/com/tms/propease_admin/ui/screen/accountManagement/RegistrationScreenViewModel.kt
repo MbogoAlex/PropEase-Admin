@@ -104,7 +104,7 @@ class RegistrationScreenViewModel(
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
-                        registrationFailureMessage = "Failed. Check your network and try again later",
+                        registrationFailureMessage = "Failed. Check your connection and try again",
                         executionStatus = ExecutionStatus.FAIL
                     )
                 }
