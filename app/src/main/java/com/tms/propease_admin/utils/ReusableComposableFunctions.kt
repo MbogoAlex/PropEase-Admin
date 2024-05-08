@@ -92,6 +92,7 @@ fun InputForm(
 @Composable
 fun PropertyItem(
     approved: Boolean,
+    paid: Boolean,
     property: PropertyDetails,
     navigateToSpecificProperty: (propertyId: String) -> Unit,
     modifier: Modifier = Modifier
@@ -199,6 +200,29 @@ fun PropertyItem(
                     ) {
                         Text(
                             text = "Unverified".uppercase(),
+                            fontSize = 11.sp,
+                            color = Color.White,
+                            modifier = Modifier
+                                .padding(
+                                    start = 10.dp,
+                                    top = 5.dp,
+                                    end = 10.dp,
+                                    bottom = 5.dp,
+                                )
+
+                        )
+                    }
+                } else if(approved && !paid) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color.Gray
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(
+                            text = "unpaid".uppercase(),
                             fontSize = 11.sp,
                             color = Color.White,
                             modifier = Modifier
@@ -514,6 +538,7 @@ fun PropertiesDisplay(
                 items(properties) {
                     PropertyItem(
                         approved = it.approved,
+                        paid = it.paid,
                         navigateToSpecificProperty = navigateToSpecificProperty,
                         property = it,
                         modifier = Modifier

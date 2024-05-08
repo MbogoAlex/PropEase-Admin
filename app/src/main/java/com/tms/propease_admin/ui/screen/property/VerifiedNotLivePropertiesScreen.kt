@@ -11,7 +11,7 @@ import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ExecutionStatus
 import com.tms.propease_admin.utils.PropertiesDisplay
 
-val unapprovedProperties = listOf<PropertyDetails>(
+val notLiveProperties = listOf<PropertyDetails>(
     PropertyDetails(
         user = propertyOwner,
         propertyId = 1,
@@ -20,7 +20,7 @@ val unapprovedProperties = listOf<PropertyDetails>(
         category = "Rental",
         rooms = 2,
         price = 10000.0,
-        approved = false,
+        approved = true,
         paid = false,
         postedDate = "2024-03-03 12:44",
         deletionTime = "2024-03-03 12:44",
@@ -37,7 +37,7 @@ val unapprovedProperties = listOf<PropertyDetails>(
         category = "Rental",
         rooms = 2,
         price = 10000.0,
-        approved = false,
+        approved = true,
         paid = false,
         postedDate = "2024-03-03 12:44",
         deletionTime = "2024-03-03 12:44",
@@ -54,7 +54,7 @@ val unapprovedProperties = listOf<PropertyDetails>(
         category = "Rental",
         rooms = 2,
         price = 10000.0,
-        approved = false,
+        approved = true,
         paid = false,
         postedDate = "2024-03-03 12:44",
         deletionTime = "2024-03-03 12:44",
@@ -71,7 +71,7 @@ val unapprovedProperties = listOf<PropertyDetails>(
         category = "Rental",
         rooms = 2,
         price = 10000.0,
-        approved = false,
+        approved = true,
         paid = false,
         postedDate = "2024-03-03 12:44",
         deletionTime = "2024-03-03 12:44",
@@ -88,7 +88,7 @@ val unapprovedProperties = listOf<PropertyDetails>(
         category = "Rental",
         rooms = 2,
         price = 10000.0,
-        approved = false,
+        approved = true,
         paid = false,
         postedDate = "2024-03-03 12:44",
         deletionTime = "2024-03-03 12:44",
@@ -105,7 +105,7 @@ val unapprovedProperties = listOf<PropertyDetails>(
         category = "Rental",
         rooms = 2,
         price = 10000.0,
-        approved = false,
+        approved = true,
         paid = false,
         postedDate = "2024-03-03 12:44",
         deletionTime = "2024-03-03 12:44",
@@ -115,18 +115,17 @@ val unapprovedProperties = listOf<PropertyDetails>(
         images = images
     ),
 )
-
 @Composable
-fun UnapprovedPropertiesScreenComposable(){
+fun VerifiedNotLivePropertiesScreenComposable() {
     Box {
-        UnapprovedPropertiesScreen(
-            properties = unapprovedProperties
+        VerifiedNotLivePropertiesScreen(
+            properties = notLiveProperties
         )
     }
 }
 
 @Composable
-fun UnapprovedPropertiesScreen(
+fun VerifiedNotLivePropertiesScreen(
     properties: List<PropertyDetails>,
     modifier: Modifier = Modifier
 ) {
@@ -140,14 +139,13 @@ fun UnapprovedPropertiesScreen(
             executionStatus = ExecutionStatus.SUCCESS
         )
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
-fun UnapprovedPropertiesScreenPreview() {
+fun VerifiedNotLivePropertiesScreenPreview() {
     PropEaseAdminTheme {
-        UnapprovedPropertiesScreen(
+        VerifiedNotLivePropertiesScreen(
             properties = unapprovedProperties
         )
     }

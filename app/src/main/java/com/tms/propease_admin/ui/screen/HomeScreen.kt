@@ -39,7 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tms.propease_admin.R
 import com.tms.propease_admin.ui.screen.property.LivePropertiesScreenComposable
-import com.tms.propease_admin.ui.screen.property.UnapprovedPropertiesScreenComposable
+import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenComposable
+import com.tms.propease_admin.ui.screen.property.VerifiedNotLivePropertiesScreenComposable
 import com.tms.propease_admin.ui.screen.property.category.CategoriesScreenComposable
 import com.tms.propease_admin.ui.screen.user.UnverifiedUsersScreenComposable
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
@@ -405,9 +406,11 @@ fun HomeScreen(
                 Screen.VERIFIED_LIVE_PROPERTIES -> {
                     LivePropertiesScreenComposable()
                 }
-                Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {}
+                Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {
+                    VerifiedNotLivePropertiesScreenComposable()
+                }
                 Screen.UNVERIFIED_PROPERTIES -> {
-                    UnapprovedPropertiesScreenComposable()
+                    UnverifiedPropertiesScreenComposable()
                 }
                 Screen.ARCHIVED_PROPERTIES -> {
                 }
