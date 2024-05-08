@@ -146,7 +146,7 @@ fun VerifiedNotLivePropertiesScreen(
 fun VerifiedNotLivePropertiesScreenPreview() {
     PropEaseAdminTheme {
         VerifiedNotLivePropertiesScreen(
-            properties = unapprovedProperties
+            properties = notLiveProperties
         )
     }
 }
