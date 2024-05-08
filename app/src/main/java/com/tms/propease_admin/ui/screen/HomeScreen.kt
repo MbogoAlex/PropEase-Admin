@@ -40,6 +40,8 @@ import androidx.compose.ui.unit.dp
 import com.tms.propease_admin.R
 import com.tms.propease_admin.ui.screen.property.LivePropertiesScreenComposable
 import com.tms.propease_admin.ui.screen.property.UnapprovedPropertiesScreenComposable
+import com.tms.propease_admin.ui.screen.property.category.CategoriesScreenComposable
+import com.tms.propease_admin.ui.screen.user.UnverifiedUsersScreenComposable
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ProfileScreenNavigationItem
 import com.tms.propease_admin.utils.PropertyScreenNavigationItem
@@ -51,15 +53,21 @@ import kotlinx.coroutines.launch
 fun HomeScreenComposable() {
     val loggedInPropertyScreens = listOf<PropertyScreenNavigationItem>(
         PropertyScreenNavigationItem(
-            title = "Live properties",
+            title = "Verified - live properties",
             icon = R.drawable.house,
-            screen = Screen.LIVE_PROPERTIES,
+            screen = Screen.VERIFIED_LIVE_PROPERTIES,
             color = Color.Gray
         ),
         PropertyScreenNavigationItem(
-            title = "Unapproved properties",
+            title = "Verified - not live properties",
             icon = R.drawable.house,
-            screen = Screen.UNAPPROVED_PROPERTIES,
+            screen = Screen.VERIFIED_NOT_LIVE_PROPERTIES,
+            color = Color.Red
+        ),
+        PropertyScreenNavigationItem(
+            title = "Unverified properties",
+            icon = R.drawable.house,
+            screen = Screen.UNVERIFIED_PROPERTIES,
             color = Color.Red
         ),
         PropertyScreenNavigationItem(
@@ -77,19 +85,13 @@ fun HomeScreenComposable() {
     )
     val loggedOutPropertyScreens = listOf<PropertyScreenNavigationItem>(
         PropertyScreenNavigationItem(
-            title = "Live properties",
+            title = "Verified - live properties",
             icon = R.drawable.house,
-            screen = Screen.LIVE_PROPERTIES,
+            screen = Screen.VERIFIED_LIVE_PROPERTIES,
             color = Color.Gray
         ),
     )
     val userScreens = listOf<UserScreenNavigationItem>(
-        UserScreenNavigationItem(
-            title = "Verified users",
-            icon = R.drawable.users,
-            screen = Screen.VERIFIED_USERS,
-            color = Color.Gray
-        ),
         UserScreenNavigationItem(
             title = "Unverified users",
             icon = R.drawable.users,
@@ -152,7 +154,7 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var currentScreen by rememberSaveable {
-        mutableStateOf(Screen.LIVE_PROPERTIES)
+        mutableStateOf(Screen.VERIFIED_LIVE_PROPERTIES)
     }
     var screenLabel by rememberSaveable {
         mutableStateOf("Properties")
@@ -400,16 +402,21 @@ fun HomeScreen(
                 )
             }
             when(currentScreen) {
-                Screen.LIVE_PROPERTIES -> {
+                Screen.VERIFIED_LIVE_PROPERTIES -> {
                     LivePropertiesScreenComposable()
                 }
-                Screen.UNAPPROVED_PROPERTIES -> {
+                Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {}
+                Screen.UNVERIFIED_PROPERTIES -> {
                     UnapprovedPropertiesScreenComposable()
                 }
-                Screen.ARCHIVED_PROPERTIES -> {}
-                Screen.CATEGORIES -> {}
-                Screen.VERIFIED_USERS -> {}
-                Screen.UNVERIFIED_USERS -> {}
+                Screen.ARCHIVED_PROPERTIES -> {
+                }
+                Screen.CATEGORIES -> {
+                    CategoriesScreenComposable()
+                }
+                Screen.UNVERIFIED_USERS -> {
+                    UnverifiedUsersScreenComposable()
+                }
                 Screen.NOTIFICATIONS -> {}
                 Screen.PROFILE -> {}
                 Screen.LOGIN -> {}
@@ -425,15 +432,21 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     val loggedInPropertyScreens = listOf<PropertyScreenNavigationItem>(
         PropertyScreenNavigationItem(
-            title = "Live properties",
+            title = "Verified - live properties",
             icon = R.drawable.house,
-            screen = Screen.LIVE_PROPERTIES,
+            screen = Screen.VERIFIED_LIVE_PROPERTIES,
             color = Color.Gray
         ),
         PropertyScreenNavigationItem(
-            title = "Unapproved properties",
+            title = "Verified - not live properties",
             icon = R.drawable.house,
-            screen = Screen.UNAPPROVED_PROPERTIES,
+            screen = Screen.VERIFIED_NOT_LIVE_PROPERTIES,
+            color = Color.Red
+        ),
+        PropertyScreenNavigationItem(
+            title = "Unverified properties",
+            icon = R.drawable.house,
+            screen = Screen.UNVERIFIED_PROPERTIES,
             color = Color.Red
         ),
         PropertyScreenNavigationItem(
@@ -451,19 +464,13 @@ fun HomeScreenPreview() {
     )
     val loggedOutPropertyScreens = listOf<PropertyScreenNavigationItem>(
         PropertyScreenNavigationItem(
-            title = "Live properties",
+            title = "Verified - live properties",
             icon = R.drawable.house,
-            screen = Screen.LIVE_PROPERTIES,
+            screen = Screen.VERIFIED_LIVE_PROPERTIES,
             color = Color.Gray
         ),
     )
     val userScreens = listOf<UserScreenNavigationItem>(
-        UserScreenNavigationItem(
-            title = "Verified users",
-            icon = R.drawable.users,
-            screen = Screen.VERIFIED_USERS,
-            color = Color.Gray
-        ),
         UserScreenNavigationItem(
             title = "Unverified users",
             icon = R.drawable.users,

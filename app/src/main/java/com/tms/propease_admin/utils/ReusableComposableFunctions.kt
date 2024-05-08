@@ -198,7 +198,7 @@ fun PropertyItem(
                             .align(Alignment.CenterHorizontally)
                     ) {
                         Text(
-                            text = "Unapproved".uppercase(),
+                            text = "Unverified".uppercase(),
                             fontSize = 11.sp,
                             color = Color.White,
                             modifier = Modifier
