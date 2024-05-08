@@ -55,28 +55,3 @@ fun checkIfEmailIsValid(email: String): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
 
-@Composable
-fun InputForm(
-    value: String,
-    label: String,
-    onValueChange: (newValue: String) -> Unit,
-    keyboardOptions: KeyboardOptions,
-    leadingIcon: Int,
-    isError: Boolean,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        shape = RoundedCornerShape(10.dp),
-        value = value,
-        label = {
-            Text(text = label)
-        },
-        leadingIcon = {
-            Icon(painter = painterResource(id = leadingIcon), contentDescription = label)
-        },
-        keyboardOptions = keyboardOptions,
-        isError = isError,
-        onValueChange = onValueChange,
-        modifier = modifier
-    )
-}

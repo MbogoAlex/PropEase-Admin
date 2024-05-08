@@ -1,4 +1,4 @@
-package com.tms.propease_admin.accountManagement
+package com.tms.propease_admin.ui.screen.accountManagement
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box

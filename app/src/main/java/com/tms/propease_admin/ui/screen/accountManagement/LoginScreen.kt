@@ -1,4 +1,4 @@
-package com.tms.propease_admin.accountManagement
+package com.tms.propease_admin.ui.screen.accountManagement
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -76,7 +76,7 @@ fun LoginScreen(
             leadingIcon = R.drawable.phone,
             isError = false,
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(20.dp))
         InputForm(
@@ -90,7 +90,7 @@ fun LoginScreen(
             leadingIcon = R.drawable.password,
             isError = false,
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
         )
         Spacer(modifier = Modifier.weight(1f))
         Button(

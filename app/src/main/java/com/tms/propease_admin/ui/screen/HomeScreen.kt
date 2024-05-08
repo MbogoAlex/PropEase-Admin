@@ -1,4 +1,4 @@
-package com.tms.propease_admin
+package com.tms.propease_admin.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,6 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +37,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tms.propease_admin.R
+import com.tms.propease_admin.ui.screen.property.LivePropertiesScreenComposable
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ProfileScreenNavigationItem
 import com.tms.propease_admin.utils.PropertyScreenNavigationItem
@@ -118,7 +119,7 @@ fun HomeScreenComposable() {
     )
     val loggedOutProfileScreens = listOf<ProfileScreenNavigationItem>(
         ProfileScreenNavigationItem(
-            title = "Log out",
+            title = "Log in",
             icon = R.drawable.login,
             screen = Screen.LOGIN,
             color = Color.Gray
@@ -398,7 +399,18 @@ fun HomeScreen(
                 )
             }
             when(currentScreen) {
-                Screen.LIVE_PROPERTIES -> {}
+                Screen.LIVE_PROPERTIES -> {
+                    LivePropertiesScreenComposable()
+                }
+                Screen.UNAPPROVED_PROPERTIES -> {}
+                Screen.ARCHIVED_PROPERTIES -> {}
+                Screen.CATEGORIES -> {}
+                Screen.VERIFIED_USERS -> {}
+                Screen.UNVERIFIED_USERS -> {}
+                Screen.NOTIFICATIONS -> {}
+                Screen.PROFILE -> {}
+                Screen.LOGIN -> {}
+                Screen.LOGOUT -> {}
                 else -> {}
             }
         }
