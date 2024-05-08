@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tms.propease_admin.R
 import com.tms.propease_admin.ui.screen.property.LivePropertiesScreenComposable
+import com.tms.propease_admin.ui.screen.property.UnapprovedPropertiesScreenComposable
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ProfileScreenNavigationItem
 import com.tms.propease_admin.utils.PropertyScreenNavigationItem
@@ -402,7 +403,9 @@ fun HomeScreen(
                 Screen.LIVE_PROPERTIES -> {
                     LivePropertiesScreenComposable()
                 }
-                Screen.UNAPPROVED_PROPERTIES -> {}
+                Screen.UNAPPROVED_PROPERTIES -> {
+                    UnapprovedPropertiesScreenComposable()
+                }
                 Screen.ARCHIVED_PROPERTIES -> {}
                 Screen.CATEGORIES -> {}
                 Screen.VERIFIED_USERS -> {}

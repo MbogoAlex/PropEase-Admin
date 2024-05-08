@@ -188,7 +188,30 @@ fun PropertyItem(
                             )
                     )
                 }
+                if(!approved) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color.Gray
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(
+                            text = "Unapproved".uppercase(),
+                            fontSize = 11.sp,
+                            color = Color.White,
+                            modifier = Modifier
+                                .padding(
+                                    start = 10.dp,
+                                    top = 5.dp,
+                                    end = 10.dp,
+                                    bottom = 5.dp,
+                                )
 
+                        )
+                    }
+                }
             }
         }
     }
