@@ -38,6 +38,11 @@ data class UserLoginResponseBody(
 
 @Serializable
 data class LoggedInData(
-    val user: UserProfile,
+    val user: UserInfo,
+)
+
+@Serializable
+data class UserInfo(
+    val userInfo: UserProfile,
     val token: String
 )

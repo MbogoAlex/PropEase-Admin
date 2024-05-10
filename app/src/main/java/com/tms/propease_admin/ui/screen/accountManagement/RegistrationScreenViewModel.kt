@@ -129,7 +129,7 @@ class RegistrationScreenViewModel(
                         uiState.value.email.isNotEmpty() &&
                         uiState.value.phone.isNotEmpty() &&
                         uiState.value.password.isNotEmpty() &&
-                        !checkIfEmailIsValid(uiState.value.email)
+                        checkIfEmailIsValid(uiState.value.email)
             )
         }
     }

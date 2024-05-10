@@ -64,13 +64,13 @@ class LoginScreenViewModel(
                 val response = apiRepository.loginUser(user)
                 if(response.isSuccessful) {
                     val userModel = DSUserModel(
-                        userId = response.body()?.data?.user?.id!!,
-                        userName = "${response.body()?.data?.user?.fname} ${response.body()?.data?.user?.lname}",
-                        phoneNumber = response.body()?.data?.user?.phoneNumber!!,
-                        email = response.body()?.data?.user?.email!!,
+                        userId = response.body()?.data?.user?.userInfo?.id!!,
+                        userName = "${response.body()?.data?.user?.userInfo?.fname} ${response.body()?.data?.user?.userInfo?.lname}",
+                        phoneNumber = response.body()?.data?.user?.userInfo?.phoneNumber!!,
+                        email = response.body()?.data?.user?.userInfo?.email!!,
                         password = uiState.value.password,
-                        token = response.body()?.data?.token!!,
-                        approvalStatus = response.body()?.data?.user?.approvalStatus!!
+                        token = response.body()?.data?.user?.token!!,
+                        approvalStatus = response.body()?.data?.user?.userInfo?.approvalStatus!!
                     )
                     dsRepository.saveUserData(userModel)
                     _uiState.update {
@@ -78,12 +78,12 @@ class LoginScreenViewModel(
                             executionStatus = ExecutionStatus.SUCCESS
                         )
                     }
-                    Log.i("LOGIN_SUCCESS", "LOGIN SUCCESSFUL")
+                    Log.i("LOGIN_SUCCESS", "LOGIN SUCCESSFUL, TOKEN: ${response.body()?.data?.user?.token!!}")
                 } else {
                     _uiState.update {
                         it.copy(
                             executionStatus = ExecutionStatus.FAIL,
-                            loginFailureMessage = "email or password already taken"
+                            loginFailureMessage = "incorrect email or password"
                         )
                     }
                     Log.e("LOGIN_FAIL_RESPONSE", response.toString())

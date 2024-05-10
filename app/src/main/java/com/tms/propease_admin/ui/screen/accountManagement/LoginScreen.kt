@@ -1,6 +1,7 @@
 package com.tms.propease_admin.ui.screen.accountManagement
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,13 +51,15 @@ object LoginScreenDestination: AppNavigation{
 @Composable
 fun LoginScreenComposable(
     navigateToHomeScreenWithoutArgs: () -> Unit,
-    navigateToPreviousScreen: () -> Unit,
     navigateToRegistrationScreen: () -> Unit,
 ){
+    BackHandler(onBack = navigateToRegistrationScreen)
     val context = LocalContext.current
 
     val viewModel: LoginScreenViewModel = viewModel(factory =  AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
+
+    viewModel.checkIfAllFieldsAreFilled()
 
     if(uiState.executionStatus == ExecutionStatus.SUCCESS) {
         navigateToHomeScreenWithoutArgs()
@@ -82,7 +85,6 @@ fun LoginScreenComposable(
             onLoginButtonClicked = {
                 viewModel.loginUser()
             },
-            navigateToPreviousScreen = navigateToPreviousScreen,
             navigateToRegistrationScreen = navigateToRegistrationScreen
         )
     }
@@ -96,7 +98,6 @@ fun LoginScreen(
     onPhoneNumberChanged: (newValue: String) -> Unit,
     onPasswordChanged: (newValue: String) -> Unit,
     onLoginButtonClicked: () -> Unit,
-    navigateToPreviousScreen: () -> Unit,
     navigateToRegistrationScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -105,7 +106,7 @@ fun LoginScreen(
             .padding(20.dp)
             .fillMaxSize()
     ) {
-        IconButton(onClick = navigateToPreviousScreen) {
+        IconButton(onClick = navigateToRegistrationScreen) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Previous screen"
@@ -187,7 +188,6 @@ fun LoginScreenPreview() {
             onPhoneNumberChanged = {},
             onPasswordChanged = {},
             onLoginButtonClicked = { /*TODO*/ },
-            navigateToPreviousScreen = { /*TODO*/ },
             navigateToRegistrationScreen = { /*TODO*/ })
     }
 }

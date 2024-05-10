@@ -62,8 +62,9 @@ object HomeScreenDestination: AppNavigation {
 
 }
 @Composable
-fun HomeScreenComposable() {
-
+fun HomeScreenComposable(
+    navigateToHomeScreenWithoutArgs: () -> Unit,
+) {
     val viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
 
@@ -149,24 +150,28 @@ fun HomeScreenComposable() {
 
     Box {
         HomeScreen(
+            userName = uiState.userDetails.userName,
             loggedIn = uiState.userDetails.userId != null,
             loggedInPropertyScreens = loggedInPropertyScreens,
             loggedOutPropertyScreens = loggedOutPropertyScreens,
             userScreens = userScreens,
             loggedInProfileScreens = loggedInProfileScreens,
-            loggedOutProfileScreens = loggedOutProfileScreens
+            loggedOutProfileScreens = loggedOutProfileScreens,
+            navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs
         )
     }
 }
 
 @Composable
 fun HomeScreen(
+    userName: String,
     loggedIn: Boolean,
     loggedInPropertyScreens: List<PropertyScreenNavigationItem>,
     loggedOutPropertyScreens: List<PropertyScreenNavigationItem>,
     userScreens: List<UserScreenNavigationItem>,
     loggedInProfileScreens: List<ProfileScreenNavigationItem>,
     loggedOutProfileScreens: List<ProfileScreenNavigationItem>,
+    navigateToHomeScreenWithoutArgs: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -200,7 +205,7 @@ fun HomeScreen(
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "Alex Mbogo",
+                            text = userName,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -408,7 +413,7 @@ fun HomeScreen(
 
                 }
                 Text(
-                    text = "Hey, Alex Mbogo",
+                    text = "Hey, $userName",
                     fontWeight = FontWeight.Bold
                 )
 
@@ -427,7 +432,9 @@ fun HomeScreen(
                     VerifiedNotLivePropertiesScreenComposable()
                 }
                 Screen.UNVERIFIED_PROPERTIES -> {
-                    UnverifiedPropertiesScreenComposable()
+                    UnverifiedPropertiesScreenComposable(
+                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs
+                    )
                 }
                 Screen.ARCHIVED_PROPERTIES -> {
                 }
@@ -529,12 +536,14 @@ fun HomeScreenPreview() {
     )
     PropEaseAdminTheme {
         HomeScreen(
+            userName = "Alex Mbogo",
             loggedIn = true,
             loggedInPropertyScreens = loggedInPropertyScreens,
             loggedOutPropertyScreens = loggedOutPropertyScreens,
             userScreens = userScreens,
             loggedInProfileScreens = loggedInProfileScreens,
-            loggedOutProfileScreens = loggedOutProfileScreens
+            loggedOutProfileScreens = loggedOutProfileScreens,
+            navigateToHomeScreenWithoutArgs = {}
         )
     }
 }

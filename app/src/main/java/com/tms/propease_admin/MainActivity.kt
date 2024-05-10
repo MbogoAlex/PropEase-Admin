@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.tms.propease_admin.ui.screen.HomeScreenComposable
 import com.tms.propease_admin.ui.screen.HomeScreenViewModel
+import com.tms.propease_admin.ui.screen.StartScreen
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreenComposable()
+                    StartScreen()
                 }
             }
         }

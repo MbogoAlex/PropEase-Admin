@@ -1,5 +1,6 @@
 package com.tms.propease_admin.ui.screen.accountManagement
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -51,9 +52,11 @@ object RegistrationScreenDestination: AppNavigation {
 fun RegistrationScreenComposable(
     navigateToLoginScreenWithArgs: (phoneNumber: String, password: String) -> Unit,
     navigateToLoginScreenWithoutArgs: () -> Unit,
-    exitApp: () -> Unit,
 ) {
-    BackHandler(onBack = exitApp)
+    val activity = (LocalContext.current as? Activity)
+    BackHandler(onBack = {
+        activity?.finish()
+    })
     val context = LocalContext.current
     val viewModel: RegistrationScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
@@ -73,7 +76,9 @@ fun RegistrationScreenComposable(
             password = uiState.password,
             phoneNumber = uiState.phone,
             registerUserButtonEnabled = uiState.buttonEnabled,
-            exitApp = exitApp,
+            exitApp = {
+                activity?.finish()
+            },
             onfNameChange = {
                 viewModel.updatefname(it)
                 viewModel.checkIfFieldValuesValid()
@@ -195,7 +200,7 @@ fun RegistrationScreen(
                     keyboardType = KeyboardType.Email
                 ),
                 leadingIcon = R.drawable.email,
-                isError = !checkIfEmailIsValid(""),
+                isError = !checkIfEmailIsValid(email),
                 modifier = Modifier
                     .fillMaxWidth()
             )
