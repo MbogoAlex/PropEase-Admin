@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.tms.propease_admin.network.ApiRepository
 import com.tms.propease_admin.ui.screen.HomeScreenViewModel
+import com.tms.propease_admin.ui.screen.SplashScreenViewModel
 import com.tms.propease_admin.ui.screen.accountManagement.LoginScreenViewModel
 import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenViewModel
 
@@ -39,6 +40,14 @@ object AppViewModelFactory {
             HomeScreenViewModel(
                 dsRepository = dsRepository,
                 savedStateHandle = savedStateHandle
+            )
+        }
+
+        // initialize SplashScreenViewModel
+        initializer {
+            val dsRepository = propEaseApplication().dsRepository
+            SplashScreenViewModel(
+                dsRepository = dsRepository
             )
         }
     }
