@@ -18,7 +18,6 @@ import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ExecutionStatus
 import com.tms.propease_admin.utils.PropertiesDisplay
 import com.tms.propease_admin.utils.PropertiesFilterSection
-import kotlinx.serialization.Serializable
 
 val propertyOwner = PropertyOwner(
     userId = 1,
@@ -166,17 +165,17 @@ val properties = listOf<PropertyDetails>(
 )
 
 @Composable
-fun LivePropertiesScreenComposable(
+fun VerifiedLivePropertiesScreenComposable(
     modifier: Modifier = Modifier
 ) {
     Box {
-        LivePropertiesScreen(
+        VerififedLivePropertiesScreen(
             properties = properties
         )
     }
 }
 @Composable
-fun LivePropertiesScreen(
+fun VerififedLivePropertiesScreen(
     properties: List<PropertyDetails>,
     modifier: Modifier = Modifier
 ) {
@@ -211,7 +210,7 @@ fun LivePropertiesScreen(
 @Composable
 fun LivePropertiesScreenPreview(){
     PropEaseAdminTheme {
-        LivePropertiesScreen(
+        VerififedLivePropertiesScreen(
             properties = properties
         )
     }

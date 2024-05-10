@@ -12,7 +12,7 @@ data class UserDetails(
     val approvalStatus: String = ""
 )
 
-fun DSUserModel.toLoggedInUserData() : UserDetails = UserDetails(
+fun DSUserModel.toUserData() : UserDetails = UserDetails(
     userId = userId,
     userName = userName,
     phoneNumber = phoneNumber,

@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.tms.propease_admin.ui.screen.HomeScreenComposable
+import com.tms.propease_admin.ui.screen.HomeScreenViewModel
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 
 class MainActivity : ComponentActivity() {

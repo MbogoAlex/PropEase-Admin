@@ -24,6 +24,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,9 +38,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tms.propease_admin.AppViewModelFactory
 import com.tms.propease_admin.R
-import com.tms.propease_admin.ui.screen.property.LivePropertiesScreenComposable
+import com.tms.propease_admin.nav.AppNavigation
 import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenComposable
+import com.tms.propease_admin.ui.screen.property.VerifiedLivePropertiesScreenComposable
 import com.tms.propease_admin.ui.screen.property.VerifiedNotLivePropertiesScreenComposable
 import com.tms.propease_admin.ui.screen.property.category.CategoriesScreenComposable
 import com.tms.propease_admin.ui.screen.user.UnverifiedUsersScreenComposable
@@ -50,8 +54,21 @@ import com.tms.propease_admin.utils.Screen
 import com.tms.propease_admin.utils.UserScreenNavigationItem
 import kotlinx.coroutines.launch
 
+object HomeScreenDestination: AppNavigation {
+    override val title: String = "Home screen"
+    override val route: String = "home-screen"
+    val childScreen: String = "child-screen"
+    val routeWithArgs: String = "$route/{$childScreen}"
+
+}
 @Composable
 fun HomeScreenComposable() {
+
+    val viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
+    val uiState by viewModel.uiState.collectAsState()
+
+
+
     val loggedInPropertyScreens = listOf<PropertyScreenNavigationItem>(
         PropertyScreenNavigationItem(
             title = "Verified - live properties",
@@ -132,7 +149,7 @@ fun HomeScreenComposable() {
 
     Box {
         HomeScreen(
-            loggedIn = true,
+            loggedIn = uiState.userDetails.userId != null,
             loggedInPropertyScreens = loggedInPropertyScreens,
             loggedOutPropertyScreens = loggedOutPropertyScreens,
             userScreens = userScreens,
@@ -404,7 +421,7 @@ fun HomeScreen(
             }
             when(currentScreen) {
                 Screen.VERIFIED_LIVE_PROPERTIES -> {
-                    LivePropertiesScreenComposable()
+                    VerifiedLivePropertiesScreenComposable()
                 }
                 Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {
                     VerifiedNotLivePropertiesScreenComposable()
