@@ -10,6 +10,7 @@ import com.tms.propease_admin.ui.screen.HomeScreenViewModel
 import com.tms.propease_admin.ui.screen.SplashScreenViewModel
 import com.tms.propease_admin.ui.screen.accountManagement.LoginScreenViewModel
 import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenViewModel
+import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenViewModel
 import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenViewModel
 
 object AppViewModelFactory {
@@ -59,6 +60,17 @@ object AppViewModelFactory {
             UnverifiedPropertiesScreenViewModel(
                 apiRepository = apiRepository,
                 dsRepository = dsRepository
+            )
+        }
+
+        // initialize PropertyDetailsScreenViewModel
+        initializer {
+            val apiRepository = propEaseApplication().container.apiRepository
+            val dsRepository = propEaseApplication().dsRepository
+            PropertyDetailsScreenViewModel(
+                apiRepository = apiRepository,
+                dsRepository = dsRepository,
+                savedStateHandle = this.createSavedStateHandle()
             )
         }
     }

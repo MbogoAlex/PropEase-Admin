@@ -73,3 +73,26 @@ data class PropertyImage(
     val approved: Boolean
 )
 
+@Serializable
+data class PropertyResponseBody(
+    val statusCode: Int,
+    val message: String,
+    val data: PropertyData
+)
+
+@Serializable
+data class PropertyData(
+    val property: PropertyDetails
+)
+
+@Serializable
+data class PropertyVerificationRequestBody(
+    val approvedImagesId: List<Int>
+)
+
+@Serializable
+data class PropertyVerificationResponseBody(
+    val statusCode: Int,
+    val message: String
+)
+

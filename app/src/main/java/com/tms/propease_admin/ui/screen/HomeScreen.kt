@@ -64,6 +64,7 @@ object HomeScreenDestination: AppNavigation {
 @Composable
 fun HomeScreenComposable(
     navigateToHomeScreenWithoutArgs: () -> Unit,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit
 ) {
     val viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
@@ -152,12 +153,17 @@ fun HomeScreenComposable(
         HomeScreen(
             userName = uiState.userDetails.userName,
             loggedIn = uiState.userDetails.userId != null,
+            childScreen = uiState.childScreen,
             loggedInPropertyScreens = loggedInPropertyScreens,
             loggedOutPropertyScreens = loggedOutPropertyScreens,
             userScreens = userScreens,
             loggedInProfileScreens = loggedInProfileScreens,
             loggedOutProfileScreens = loggedOutProfileScreens,
-            navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs
+            navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
+            navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
+            clearChildScreen = {
+                viewModel.clearChildScreen()
+            }
         )
     }
 }
@@ -166,12 +172,15 @@ fun HomeScreenComposable(
 fun HomeScreen(
     userName: String,
     loggedIn: Boolean,
+    childScreen: String,
+    clearChildScreen: () -> Unit,
     loggedInPropertyScreens: List<PropertyScreenNavigationItem>,
     loggedOutPropertyScreens: List<PropertyScreenNavigationItem>,
     userScreens: List<UserScreenNavigationItem>,
     loggedInProfileScreens: List<ProfileScreenNavigationItem>,
     loggedOutProfileScreens: List<ProfileScreenNavigationItem>,
     navigateToHomeScreenWithoutArgs: () -> Unit,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -182,6 +191,15 @@ fun HomeScreen(
     var screenLabel by rememberSaveable {
         mutableStateOf("Properties")
     }
+
+    if(childScreen == "verified-not-live-properties-screen") {
+        currentScreen = Screen.VERIFIED_NOT_LIVE_PROPERTIES
+        clearChildScreen()
+    } else if(childScreen == "unverified-properties-screen") {
+        currentScreen = Screen.UNVERIFIED_PROPERTIES
+        clearChildScreen()
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -433,7 +451,8 @@ fun HomeScreen(
                 }
                 Screen.UNVERIFIED_PROPERTIES -> {
                     UnverifiedPropertiesScreenComposable(
-                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs
+                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
+                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
                     )
                 }
                 Screen.ARCHIVED_PROPERTIES -> {
@@ -538,12 +557,15 @@ fun HomeScreenPreview() {
         HomeScreen(
             userName = "Alex Mbogo",
             loggedIn = true,
+            childScreen = "",
             loggedInPropertyScreens = loggedInPropertyScreens,
             loggedOutPropertyScreens = loggedOutPropertyScreens,
             userScreens = userScreens,
             loggedInProfileScreens = loggedInProfileScreens,
             loggedOutProfileScreens = loggedOutProfileScreens,
-            navigateToHomeScreenWithoutArgs = {}
+            navigateToHomeScreenWithoutArgs = {},
+            navigateToSpecificPropertyScreen = {},
+            clearChildScreen = {}
         )
     }
 }

@@ -44,6 +44,14 @@ class HomeScreenViewModel(
         }
     }
 
+    fun clearChildScreen() {
+        _uiState.update {
+            it.copy(
+                childScreen = ""
+            )
+        }
+    }
+
     init {
         loadStartupData()
     }

@@ -111,13 +111,13 @@ fun PropertyItem(
     approved: Boolean,
     paid: Boolean,
     property: PropertyDetails,
-    navigateToSpecificProperty: (propertyId: String) -> Unit,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .clickable {
-                navigateToSpecificProperty(property.propertyId.toString())
+                navigateToSpecificPropertyScreen(property.propertyId.toString())
             }
     ) {
         Column {
@@ -508,7 +508,7 @@ fun PropertiesFilterSection(
 @Composable
 fun PropertiesDisplay(
     properties: List<PropertyDetails>,
-    navigateToSpecificProperty: (propertyId: String) -> Unit,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     executionStatus: ExecutionStatus,
     modifier: Modifier = Modifier
 ) {
@@ -542,7 +542,7 @@ fun PropertiesDisplay(
                     .fillMaxSize()
             ) {
                 if(showText) {
-                    Text(text = "Properties not added yet")
+                    Text(text = "No properties")
                 } else {
                     CircularProgressIndicator()
                 }
@@ -556,7 +556,7 @@ fun PropertiesDisplay(
                     PropertyItem(
                         approved = it.approved,
                         paid = it.paid,
-                        navigateToSpecificProperty = navigateToSpecificProperty,
+                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
                         property = it,
                         modifier = Modifier
                             .padding(8.dp)
@@ -646,6 +646,7 @@ fun PropertyInfo(
     property: PropertyDetails,
     executionStatus: ExecutionStatus,
     onVerifyPropertyClicked: () -> Unit,
+    onRejectPropertyClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -875,6 +876,26 @@ fun PropertyInfo(
                     CircularProgressIndicator()
                 } else {
                     Text(text = "Verify")
+                }
+
+            }
+        } else if(property.approved) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                enabled = executionStatus != ExecutionStatus.LOADING,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Black
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = {
+                    onRejectPropertyClicked()
+                }
+            ) {
+                if(executionStatus == ExecutionStatus.LOADING) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(text = "Disapprove")
                 }
 
             }

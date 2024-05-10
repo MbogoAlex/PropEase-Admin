@@ -135,7 +135,7 @@ fun VerifiedNotLivePropertiesScreen(
     ) {
         PropertiesDisplay(
             properties = properties,
-            navigateToSpecificProperty = {},
+            navigateToSpecificPropertyScreen = {},
             executionStatus = ExecutionStatus.SUCCESS
         )
     }

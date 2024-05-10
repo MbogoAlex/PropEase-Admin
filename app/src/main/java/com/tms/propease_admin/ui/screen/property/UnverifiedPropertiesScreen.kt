@@ -124,6 +124,7 @@ val unapprovedProperties = listOf<PropertyDetails>(
 @Composable
 fun UnverifiedPropertiesScreenComposable(
     navigateToHomeScreenWithoutArgs: () -> Unit,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
 ){
     val viewModel: UnverifiedPropertiesScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
@@ -132,7 +133,8 @@ fun UnverifiedPropertiesScreenComposable(
 
     Box {
         UnverifiedPropertiesScreen(
-            properties = uiState.properties
+            properties = uiState.properties,
+            navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
         )
     }
 }
@@ -140,6 +142,7 @@ fun UnverifiedPropertiesScreenComposable(
 @Composable
 fun UnverifiedPropertiesScreen(
     properties: List<PropertyDetails>,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -148,7 +151,7 @@ fun UnverifiedPropertiesScreen(
     ) {
         PropertiesDisplay(
             properties = properties,
-            navigateToSpecificProperty = {},
+            navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
             executionStatus = ExecutionStatus.SUCCESS
         )
     }
@@ -160,7 +163,8 @@ fun UnverifiedPropertiesScreen(
 fun UnverifiedPropertiesScreenPreview() {
     PropEaseAdminTheme {
         UnverifiedPropertiesScreen(
-            properties = unapprovedProperties
+            properties = unapprovedProperties,
+            navigateToSpecificPropertyScreen = {}
         )
     }
 }

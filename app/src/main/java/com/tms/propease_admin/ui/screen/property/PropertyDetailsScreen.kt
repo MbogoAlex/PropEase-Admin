@@ -12,11 +12,16 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tms.propease_admin.AppViewModelFactory
 import com.tms.propease_admin.model.PropertyDetails
+import com.tms.propease_admin.nav.AppNavigation
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ExecutionStatus
 import com.tms.propease_admin.utils.PropertyImages
@@ -39,12 +44,46 @@ val property = PropertyDetails(
     paymentDetails =propertyPayment,
     images = images
 )
+
+object PropertyDetailsScreenDestination: AppNavigation{
+    override val title: String = "Property details screen"
+    override val route: String = "property-details-screen"
+    val propertyId: String = "propertyId"
+    val routeWithArgs: String = "$route/{$propertyId}"
+}
 @Composable
-fun PropertyDetailsScreenComposable() {
+fun PropertyDetailsScreenComposable(
+    navigateToPreviousScreen: () -> Unit,
+    navigateToHomeScreenWithArgs: (childScreen: String) -> Unit,
+    navigateToHomeScreenWithoutArgs: () -> Unit,
+) {
+
+    val viewModel: PropertyDetailsScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
+    val uiState by viewModel.uiState.collectAsState()
+
+    if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyVerified && uiState.property.paid) {
+        if(uiState.property.paid) {
+            navigateToHomeScreenWithoutArgs()
+        } else if(!uiState.property.paid) {
+            navigateToHomeScreenWithArgs("verified-not-live-properties-screen")
+        }
+        viewModel.resetVerificationStatus()
+    } else if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyUnVerified) {
+        navigateToHomeScreenWithArgs("unverified-properties-screen")
+        viewModel.resetVerificationStatus()
+    }
+
     Box {
         PropertyDetailsScreen(
-            property = property,
-            navigateToPreviousScreen = {}
+            property = uiState.property,
+            navigateToPreviousScreen = navigateToPreviousScreen,
+            executionStatus = uiState.executionStatus,
+            onVerifyPropertyClicked = {
+                viewModel.verifyProperty()
+            },
+            onRejectPropertyClicked = {
+                viewModel.rejectProperty()
+            }
         )
     }
 }
@@ -52,7 +91,10 @@ fun PropertyDetailsScreenComposable() {
 @Composable
 fun PropertyDetailsScreen(
     property: PropertyDetails,
+    executionStatus: ExecutionStatus,
     navigateToPreviousScreen: () -> Unit,
+    onVerifyPropertyClicked: () -> Unit,
+    onRejectPropertyClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -80,8 +122,10 @@ fun PropertyDetailsScreen(
         )
         PropertyInfo(
             property = property,
-            executionStatus = ExecutionStatus.INITIAL,
-            onVerifyPropertyClicked = { /*TODO*/ })
+            executionStatus = executionStatus,
+            onVerifyPropertyClicked = onVerifyPropertyClicked,
+            onRejectPropertyClicked = onRejectPropertyClicked
+        )
     }
 }
 
@@ -95,7 +139,10 @@ fun PropertyDetailsScreenPreview() {
     PropEaseAdminTheme {
         PropertyDetailsScreen(
             property = property,
-            navigateToPreviousScreen = {}
+            executionStatus = ExecutionStatus.INITIAL,
+            navigateToPreviousScreen = {},
+            onVerifyPropertyClicked = {},
+            onRejectPropertyClicked = {}
         )
     }
 }

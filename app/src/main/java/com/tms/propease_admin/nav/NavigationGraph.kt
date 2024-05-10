@@ -16,6 +16,8 @@ import com.tms.propease_admin.ui.screen.accountManagement.LoginScreenComposable
 import com.tms.propease_admin.ui.screen.accountManagement.LoginScreenDestination
 import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenComposable
 import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenDestination
+import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenComposable
+import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenDestination
 
 @Composable
 fun NavigationGraph(
@@ -84,6 +86,46 @@ fun NavigationGraph(
             HomeScreenComposable(
                 navigateToHomeScreenWithoutArgs = {
                     navController.navigate(HomeScreenDestination.route)
+                },
+                navigateToSpecificPropertyScreen = {
+                    navController.navigate("${PropertyDetailsScreenDestination.route}/${it}")
+                }
+            )
+        }
+        composable(
+            PropertyDetailsScreenDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(PropertyDetailsScreenDestination.propertyId) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            PropertyDetailsScreenComposable(
+                navigateToPreviousScreen = {
+                    navController.navigateUp()
+                },
+                navigateToHomeScreenWithoutArgs = {
+                    navController.navigate(HomeScreenDestination.route)
+                },
+                navigateToHomeScreenWithArgs = {
+                    navController.navigate("${HomeScreenDestination.route}/${it}")
+                }
+            )
+        }
+        composable(
+            HomeScreenDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(HomeScreenDestination.childScreen) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            HomeScreenComposable(
+                navigateToHomeScreenWithoutArgs = {
+                    navController.navigate(HomeScreenDestination.route)
+                },
+                navigateToSpecificPropertyScreen = {
+                    navController.navigate("${PropertyDetailsScreenDestination.route}/${it}")
                 }
             )
         }

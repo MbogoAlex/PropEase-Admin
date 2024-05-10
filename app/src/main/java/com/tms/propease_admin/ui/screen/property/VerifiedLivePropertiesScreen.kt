@@ -207,7 +207,7 @@ fun VerififedLivePropertiesScreen(
             Spacer(modifier = Modifier.height(16.dp))
             PropertiesDisplay(
                 properties = properties,
-                navigateToSpecificProperty = {},
+                navigateToSpecificPropertyScreen = {},
                 executionStatus = ExecutionStatus.SUCCESS
             )
         }
