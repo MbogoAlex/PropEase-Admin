@@ -1,11 +1,16 @@
 package com.tms.propease_admin.ui.screen.property
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tms.propease_admin.AppViewModelFactory
 import com.tms.propease_admin.model.PropertyDetails
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ExecutionStatus
@@ -116,10 +121,18 @@ val notLiveProperties = listOf<PropertyDetails>(
     ),
 )
 @Composable
-fun VerifiedNotLivePropertiesScreenComposable() {
+fun VerifiedNotLivePropertiesScreenComposable(
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
+    navigateToHomeScreenWithoutArgs: () -> Unit
+) {
+    BackHandler(onBack = navigateToHomeScreenWithoutArgs)
+    val viewModel: VerifiedNotLivePropertiesScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
+    val uiState by viewModel.uiState.collectAsState()
+
     Box {
         VerifiedNotLivePropertiesScreen(
-            properties = notLiveProperties
+            navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
+            properties = uiState.properties
         )
     }
 }
@@ -127,6 +140,7 @@ fun VerifiedNotLivePropertiesScreenComposable() {
 @Composable
 fun VerifiedNotLivePropertiesScreen(
     properties: List<PropertyDetails>,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -135,7 +149,7 @@ fun VerifiedNotLivePropertiesScreen(
     ) {
         PropertiesDisplay(
             properties = properties,
-            navigateToSpecificPropertyScreen = {},
+            navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
             executionStatus = ExecutionStatus.SUCCESS
         )
     }
@@ -146,7 +160,8 @@ fun VerifiedNotLivePropertiesScreen(
 fun VerifiedNotLivePropertiesScreenPreview() {
     PropEaseAdminTheme {
         VerifiedNotLivePropertiesScreen(
-            properties = notLiveProperties
+            properties = notLiveProperties,
+            navigateToSpecificPropertyScreen = {}
         )
     }
 }

@@ -40,6 +40,7 @@ data class PropertyDetailsScreenUiState(
     val property: PropertyDetails = propertyDt,
     val propertyVerified: Boolean = false,
     val propertyUnVerified: Boolean = false,
+    val verificationMessage: String = "",
     val executionStatus: ExecutionStatus = ExecutionStatus.INITIAL
 )
 class PropertyDetailsScreenViewModel(
@@ -131,6 +132,7 @@ class PropertyDetailsScreenViewModel(
                     _uiState.update {
                         it.copy(
                             executionStatus = ExecutionStatus.FAIL,
+                            verificationMessage = "Failed to approve property",
                             propertyVerified = false
                         )
                     }
@@ -140,6 +142,7 @@ class PropertyDetailsScreenViewModel(
                 _uiState.update {
                     it.copy(
                         executionStatus = ExecutionStatus.FAIL,
+                        verificationMessage = "Failed. Check your connection",
                         propertyVerified = false
                     )
                 }
@@ -180,6 +183,7 @@ class PropertyDetailsScreenViewModel(
                     _uiState.update {
                         it.copy(
                             propertyUnVerified = false,
+                            verificationMessage = "Failed to disapprove property",
                             executionStatus = ExecutionStatus.FAIL
                         )
                     }
@@ -189,6 +193,7 @@ class PropertyDetailsScreenViewModel(
                 _uiState.update {
                     it.copy(
                         propertyUnVerified = false,
+                        verificationMessage = "Failed.Check your connection",
                         executionStatus = ExecutionStatus.FAIL
                     )
                 }

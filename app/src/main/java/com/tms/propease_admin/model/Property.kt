@@ -8,6 +8,18 @@ data class PropertiesResponseBody(
     val message: String,
     val data: PropertiesData
 )
+
+@Serializable
+data class FilteredPropertiesResponseBody(
+    val statusCode: Int,
+    val message: String,
+    val data: FilteredPropertiesData
+)
+
+@Serializable
+data class FilteredPropertiesData(
+    val properties: List<PropertyDetails>
+)
 @Serializable
 data class PropertiesData(
     val property: List<PropertyDetails>
@@ -24,7 +36,7 @@ data class PropertyDetails(
     val approved: Boolean,
     val paid: Boolean,
     val postedDate: String,
-    val deletionTime: String,
+    val deletionTime: String?,
     val features: List<String>,
     val location: PropertyLocation,
     val paymentDetails: PaymentDetails,

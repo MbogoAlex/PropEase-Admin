@@ -1,5 +1,6 @@
 package com.tms.propease_admin.ui.screen.property
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,13 +10,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,11 +66,20 @@ fun PropertyDetailsScreenComposable(
     navigateToHomeScreenWithArgs: (childScreen: String) -> Unit,
     navigateToHomeScreenWithoutArgs: () -> Unit,
 ) {
-
+    val context = LocalContext.current
     val viewModel: PropertyDetailsScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
 
-    if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyVerified && uiState.property.paid) {
+    var approvePropertyDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var disApprovePropertyDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyVerified) {
+        Toast.makeText(context, "Property verified", Toast.LENGTH_SHORT).show()
         if(uiState.property.paid) {
             navigateToHomeScreenWithoutArgs()
         } else if(!uiState.property.paid) {
@@ -69,8 +87,62 @@ fun PropertyDetailsScreenComposable(
         }
         viewModel.resetVerificationStatus()
     } else if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyUnVerified) {
+        Toast.makeText(context, "Property unverified", Toast.LENGTH_SHORT).show()
         navigateToHomeScreenWithArgs("unverified-properties-screen")
         viewModel.resetVerificationStatus()
+    } else if(uiState.executionStatus == ExecutionStatus.FAIL) {
+        Toast.makeText(context, uiState.verificationMessage, Toast.LENGTH_SHORT).show()
+        viewModel.resetVerificationStatus()
+    }
+
+    if(approvePropertyDialog) {
+        AlertDialog(
+            title = {
+                Text(text = "Verify Property")
+            },
+            text = {
+                Text(text = "Confirm verification decision")
+            },
+            onDismissRequest = { approvePropertyDialog  = !approvePropertyDialog },
+            dismissButton = { 
+                TextButton(onClick = { approvePropertyDialog = !approvePropertyDialog }) {
+                      Text(text = "Dismiss")          
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.verifyProperty()
+                    approvePropertyDialog  = !approvePropertyDialog
+                }) {
+                    Text(text = "Confirm")
+                }
+            }
+        )
+    }
+
+    if(disApprovePropertyDialog) {
+        AlertDialog(
+            title = {
+                Text(text = "Disapprove Property")
+            },
+            text = {
+                Text(text = "Confirm disapproval")
+            },
+            onDismissRequest = { disApprovePropertyDialog  = !disApprovePropertyDialog },
+            dismissButton = {
+                TextButton(onClick = { disApprovePropertyDialog = !disApprovePropertyDialog }) {
+                    Text(text = "Dismiss")
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.rejectProperty()
+                    disApprovePropertyDialog  = !disApprovePropertyDialog
+                }) {
+                    Text(text = "Confirm")
+                }
+            }
+        )
     }
 
     Box {
@@ -79,10 +151,10 @@ fun PropertyDetailsScreenComposable(
             navigateToPreviousScreen = navigateToPreviousScreen,
             executionStatus = uiState.executionStatus,
             onVerifyPropertyClicked = {
-                viewModel.verifyProperty()
+                approvePropertyDialog = true
             },
             onRejectPropertyClicked = {
-                viewModel.rejectProperty()
+                disApprovePropertyDialog = true
             }
         )
     }

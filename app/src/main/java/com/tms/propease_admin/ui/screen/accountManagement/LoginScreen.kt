@@ -66,6 +66,7 @@ fun LoginScreenComposable(
         viewModel.resetLoginStatus()
     } else if(uiState.executionStatus == ExecutionStatus.FAIL) {
         Toast.makeText(context, uiState.loginFailureMessage, Toast.LENGTH_SHORT).show()
+        viewModel.resetLoginStatus()
     }
 
     Box {

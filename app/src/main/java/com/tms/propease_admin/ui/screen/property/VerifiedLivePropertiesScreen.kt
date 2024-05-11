@@ -8,10 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tms.propease_admin.AppViewModelFactory
+import com.tms.propease_admin.model.CategoryItem
 import com.tms.propease_admin.model.PaymentDetails
 import com.tms.propease_admin.model.PropertyDetails
 import com.tms.propease_admin.model.PropertyImage
@@ -173,19 +178,45 @@ fun VerifiedLivePropertiesScreenComposable(
 ) {
     val activity = (LocalContext.current as? Activity)
 
-
     BackHandler(onBack = {
         activity?.finish()
     })
+
+    val viewModel: VerifiedLivePropertiesScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
+    val uiState by viewModel.uiState.collectAsState()
+
     Box {
-        VerififedLivePropertiesScreen(
-            properties = properties
-        )
+        VerifiedLivePropertiesScreen(
+            properties = uiState.properties,
+            filteringOn = uiState.filteringOn,
+            selectedLocation = uiState.locationSelected,
+            categories = uiState.categories,
+            categoryNameSelected = uiState.categoryNameSelected,
+            numberOfRoomsSelected = uiState.roomsSelected,
+            onSearchLocationChanged = {
+                viewModel.filterByLocation(it)
+            },
+            onChangeNumberOfRooms = {
+                viewModel.filterByNumOfRooms(it)
+            },
+            onChangeCategory = {
+                viewModel.filterByCategory(it)
+            },
+            undoFilter = { viewModel.undoFiltering() })
     }
 }
 @Composable
-fun VerififedLivePropertiesScreen(
+fun VerifiedLivePropertiesScreen(
     properties: List<PropertyDetails>,
+    filteringOn: Boolean,
+    selectedLocation: String,
+    categories: List<CategoryItem>,
+    categoryNameSelected: String,
+    numberOfRoomsSelected: String,
+    onSearchLocationChanged: (location: String) -> Unit,
+    onChangeNumberOfRooms: (rooms: String) -> Unit,
+    onChangeCategory: (categoryItem: CategoryItem) -> Unit,
+    undoFilter: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -194,15 +225,15 @@ fun VerififedLivePropertiesScreen(
     ) {
         Column {
             PropertiesFilterSection(
-                filteringOn = false,
-                selectedLocation = "",
-                categories = emptyList(),
-                categoryNameSelected = "",
-                numberOfRoomsSelected = "",
-                onSearchLocationChanged = {},
-                onChangeNumberOfRooms = {location, rooms, categoryId, categoryName ->  },
-                onChangeCategory = {location, rooms, categoryId, categoryName ->  },
-                unfilter = { /*TODO*/ }
+                filteringOn = filteringOn,
+                selectedLocation = selectedLocation,
+                categories = categories,
+                categoryNameSelected = categoryNameSelected,
+                numberOfRoomsSelected = numberOfRoomsSelected,
+                onSearchLocationChanged = onSearchLocationChanged,
+                onChangeNumberOfRooms = onChangeNumberOfRooms,
+                onChangeCategory = onChangeCategory,
+                unfilter = undoFilter
             )
             Spacer(modifier = Modifier.height(16.dp))
             PropertiesDisplay(
@@ -219,8 +250,16 @@ fun VerififedLivePropertiesScreen(
 @Composable
 fun LivePropertiesScreenPreview(){
     PropEaseAdminTheme {
-        VerififedLivePropertiesScreen(
-            properties = properties
-        )
+        VerifiedLivePropertiesScreen(
+            properties = properties,
+            filteringOn = false,
+            selectedLocation = "",
+            categories = emptyList(),
+            categoryNameSelected = "",
+            numberOfRoomsSelected = "",
+            onSearchLocationChanged = {},
+            onChangeNumberOfRooms = {},
+            onChangeCategory = {},
+            undoFilter = { /*TODO*/ })
     }
 }

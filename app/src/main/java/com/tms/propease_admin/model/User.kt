@@ -45,3 +45,27 @@ data class UserDt(
     val profiles: UserProfile
 )
 
+@Serializable
+data class UnverifiedUsersResponseBody(
+    val statusCode: Int,
+    val message: String,
+    val data: UsersProfile
+)
+
+@Serializable
+data class UsersProfile(
+    val profiles: List<UnverifiedUserProfile>
+)
+
+@Serializable
+data class UnverifiedUserProfile(
+    val documents: List<Document>,
+    val user: UserProfile
+)
+
+@Serializable
+data class Document(
+    val id: Int,
+    val name: String
+)
+

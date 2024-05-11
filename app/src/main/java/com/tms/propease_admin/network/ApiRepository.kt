@@ -1,9 +1,12 @@
 package com.tms.propease_admin.network
 
+import com.tms.propease_admin.model.CategoryResponseBody
+import com.tms.propease_admin.model.FilteredPropertiesResponseBody
 import com.tms.propease_admin.model.PropertiesResponseBody
 import com.tms.propease_admin.model.PropertyResponseBody
 import com.tms.propease_admin.model.PropertyVerificationRequestBody
 import com.tms.propease_admin.model.PropertyVerificationResponseBody
+import com.tms.propease_admin.model.UnverifiedUsersResponseBody
 import com.tms.propease_admin.model.UserLoginRequestBody
 import com.tms.propease_admin.model.UserLoginResponseBody
 import com.tms.propease_admin.model.UserRegistrationRequestBody
@@ -20,6 +23,13 @@ interface ApiRepository {
     suspend fun verifyProperty(token: String, propertyId: Int, propertyVerificationRequestBody: PropertyVerificationRequestBody): Response<PropertyVerificationResponseBody>
 
     suspend fun cancelPropertyVerification(token: String, propertyId: Int, propertyVerificationRequestBody: PropertyVerificationRequestBody): Response<PropertyVerificationResponseBody>
+    suspend fun getUnpaidProperties(token: String): Response<PropertiesResponseBody>
+
+    suspend fun getUnverifiedUsers(token: String): Response<UnverifiedUsersResponseBody>
+
+    suspend fun getCategories(): Response<CategoryResponseBody>
+
+    suspend fun getFilteredLiveProperties(location: String, rooms: String, categoryId: String): Response<FilteredPropertiesResponseBody>
 }
 
 class NetworkRepository(private val apiService: ApiService): ApiRepository {
@@ -61,6 +71,26 @@ class NetworkRepository(private val apiService: ApiService): ApiRepository {
         token = "Bearer $token",
         propertyId = propertyId,
         propertyVerificationRequestBody = propertyVerificationRequestBody
+    )
+
+    override suspend fun getUnpaidProperties(token: String): Response<PropertiesResponseBody> = apiService.getUnpaidProperties(
+        token = "Bearer $token"
+    )
+
+    override suspend fun getUnverifiedUsers(token: String): Response<UnverifiedUsersResponseBody> = apiService.getUnverifiedUsers(
+        token = "Bearer $token"
+    )
+
+    override suspend fun getCategories(): Response<CategoryResponseBody> = apiService.getCategories()
+
+    override suspend fun getFilteredLiveProperties(
+        location: String,
+        rooms: String,
+        categoryId: String
+    ): Response<FilteredPropertiesResponseBody> = apiService.getFilteredLiveProperties(
+        location = location,
+        rooms = rooms,
+        categoryId = categoryId
     )
 
 }

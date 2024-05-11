@@ -447,7 +447,10 @@ fun HomeScreen(
                     VerifiedLivePropertiesScreenComposable()
                 }
                 Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {
-                    VerifiedNotLivePropertiesScreenComposable()
+                    VerifiedNotLivePropertiesScreenComposable(
+                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
+                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
+                    )
                 }
                 Screen.UNVERIFIED_PROPERTIES -> {
                     UnverifiedPropertiesScreenComposable(
@@ -461,7 +464,9 @@ fun HomeScreen(
                     CategoriesScreenComposable()
                 }
                 Screen.UNVERIFIED_USERS -> {
-                    UnverifiedUsersScreenComposable()
+                    UnverifiedUsersScreenComposable(
+                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs
+                    )
                 }
                 Screen.NOTIFICATIONS -> {}
                 Screen.PROFILE -> {}

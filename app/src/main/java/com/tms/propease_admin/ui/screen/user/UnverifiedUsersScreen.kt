@@ -1,5 +1,6 @@
 package com.tms.propease_admin.ui.screen.user
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,14 +18,19 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tms.propease_admin.AppViewModelFactory
 import com.tms.propease_admin.model.UserProfile
 import com.tms.propease_admin.model.UserRole
+import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenViewModel
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 
 
@@ -94,10 +100,17 @@ val users = listOf<UserProfile>(
 
 )
 @Composable
-fun UnverifiedUsersScreenComposable() {
+fun UnverifiedUsersScreenComposable(
+    navigateToHomeScreenWithoutArgs: () -> Unit,
+) {
+    BackHandler(onBack = navigateToHomeScreenWithoutArgs)
+    val viewModel: UnverifiedUsersScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
+    val uiState by viewModel.uiState.collectAsState()
+
+
     Box {
         UnverifiedUsersScreen(
-            users = users
+            users = uiState.unverifiedUsers
         )
     }
 }

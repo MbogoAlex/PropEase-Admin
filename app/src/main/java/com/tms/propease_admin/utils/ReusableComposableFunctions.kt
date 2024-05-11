@@ -262,7 +262,7 @@ fun PropertyItem(
 fun CategorySelection(
     categories: List<CategoryItem>,
     categoryNameSelected: String,
-    onChangeCategory: (location: String?, rooms: Int?, categoryId: Int?, categoryName: String?) -> Unit,
+    onChangeCategory: (categoryItem: CategoryItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -313,7 +313,7 @@ fun CategorySelection(
                     },
                     onClick = {
                         onChangeCategory(
-                            null, null, i.id, i.name
+                            i
                         )
                         expanded = !expanded
                     }
@@ -326,7 +326,7 @@ fun CategorySelection(
 @Composable
 fun NumberOfRoomsSelection(
     numberOfRoomsSelected: String,
-    onChangeNumberOfRooms: (location: String?, rooms: Int?, categoryId: Int?, categoryName: String?) -> Unit,
+    onChangeNumberOfRooms: (rooms: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val rooms = listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8)
@@ -383,7 +383,7 @@ fun NumberOfRoomsSelection(
                     },
                     onClick = {
                         onChangeNumberOfRooms(
-                            null, i, null,null
+                            i.toString()
                         )
 
                         expanded = !expanded
@@ -435,8 +435,8 @@ fun PropertiesFilterSection(
     categoryNameSelected: String,
     numberOfRoomsSelected: String,
     onSearchLocationChanged: (newValue: String) -> Unit,
-    onChangeNumberOfRooms: (location: String?, rooms: Int?, categoryId: Int?, categoryName: String?) -> Unit,
-    onChangeCategory: (location: String?, rooms: Int?, categoryId: Int?, categoryName: String?) -> Unit,
+    onChangeNumberOfRooms: (rooms: String) -> Unit,
+    onChangeCategory: (categoryItem: CategoryItem) -> Unit,
     unfilter: () -> Unit,
     modifier: Modifier = Modifier
 ) {

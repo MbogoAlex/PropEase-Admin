@@ -19,6 +19,7 @@ class AppContainer(private val context: Context): Container {
         coerceInputValues = true
     }
 
+//    private val baseUrl = "http://172.105.90.112:8080/pManager/api/"
     private val baseUrl = "http://192.168.80.6:8080/pManager/api/"
 
     private val retrofit = Retrofit.Builder()

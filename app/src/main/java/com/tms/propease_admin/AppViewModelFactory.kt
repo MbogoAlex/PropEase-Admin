@@ -12,6 +12,9 @@ import com.tms.propease_admin.ui.screen.accountManagement.LoginScreenViewModel
 import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenViewModel
 import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenViewModel
 import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenViewModel
+import com.tms.propease_admin.ui.screen.property.VerifiedLivePropertiesScreenViewModel
+import com.tms.propease_admin.ui.screen.property.VerifiedNotLivePropertiesScreenViewModel
+import com.tms.propease_admin.ui.screen.user.UnverifiedUsersScreenViewModel
 
 object AppViewModelFactory {
     val Factory = viewModelFactory {
@@ -71,6 +74,36 @@ object AppViewModelFactory {
                 apiRepository = apiRepository,
                 dsRepository = dsRepository,
                 savedStateHandle = this.createSavedStateHandle()
+            )
+        }
+
+        // initialize VerifiedNotLivePropertiesScreenViewModel
+        initializer {
+            val apiRepository = propEaseApplication().container.apiRepository
+            val dsRepository = propEaseApplication().dsRepository
+            VerifiedNotLivePropertiesScreenViewModel(
+                apiRepository = apiRepository,
+                dsRepository = dsRepository
+            )
+        }
+
+        // initialize UnverifiedUsersScreenViewModel
+        initializer {
+            val apiRepository = propEaseApplication().container.apiRepository
+            val dsRepository = propEaseApplication().dsRepository
+            UnverifiedUsersScreenViewModel(
+                apiRepository = apiRepository,
+                dsRepository = dsRepository
+            )
+        }
+
+        // initialize VerifiedLivePropertiesScreenViewModel
+        initializer {
+            val apiRepository = propEaseApplication().container.apiRepository
+            val dsRepository = propEaseApplication().dsRepository
+            VerifiedLivePropertiesScreenViewModel(
+                apiRepository = apiRepository,
+                dsRepository = dsRepository
             )
         }
     }

@@ -19,6 +19,13 @@ enum class ExecutionStatus {
     SUCCESS,
     FAIL
 }
+
+enum class VerificationStatus {
+    INITIAL,
+    LOADING,
+    SUCCESS,
+    FAIL
+}
 enum class Screen {
     VERIFIED_LIVE_PROPERTIES,
     VERIFIED_NOT_LIVE_PROPERTIES,
