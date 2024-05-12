@@ -14,7 +14,9 @@ import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenViewModel
 import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenViewModel
 import com.tms.propease_admin.ui.screen.property.VerifiedLivePropertiesScreenViewModel
 import com.tms.propease_admin.ui.screen.property.VerifiedNotLivePropertiesScreenViewModel
+import com.tms.propease_admin.ui.screen.property.category.CategoriesScreenViewModel
 import com.tms.propease_admin.ui.screen.user.UnverifiedUsersScreenViewModel
+import com.tms.propease_admin.ui.screen.user.UserDetailsScreenViewModel
 
 object AppViewModelFactory {
     val Factory = viewModelFactory {
@@ -102,6 +104,28 @@ object AppViewModelFactory {
             val apiRepository = propEaseApplication().container.apiRepository
             val dsRepository = propEaseApplication().dsRepository
             VerifiedLivePropertiesScreenViewModel(
+                apiRepository = apiRepository,
+                dsRepository = dsRepository
+            )
+        }
+
+        // initialize UserDetailsScreenViewModel
+        initializer {
+            val apiRepository = propEaseApplication().container.apiRepository
+            val dsRepository = propEaseApplication().dsRepository
+            val savedStateHandle = this.createSavedStateHandle()
+            UserDetailsScreenViewModel(
+                apiRepository = apiRepository,
+                dsRepository = dsRepository,
+                savedStateHandle = savedStateHandle
+            )
+        }
+
+        // initialize CategoriesScreenViewModel
+        initializer {
+            val apiRepository = propEaseApplication().container.apiRepository
+            val dsRepository = propEaseApplication().dsRepository
+            CategoriesScreenViewModel(
                 apiRepository = apiRepository,
                 dsRepository = dsRepository
             )

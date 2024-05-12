@@ -54,11 +54,11 @@ data class UnverifiedUsersResponseBody(
 
 @Serializable
 data class UsersProfile(
-    val profiles: List<UnverifiedUserProfile>
+    val profiles: List<UserVerificationProfile>
 )
 
 @Serializable
-data class UnverifiedUserProfile(
+data class UserVerificationProfile(
     val documents: List<Document>,
     val user: UserProfile
 )
@@ -67,5 +67,29 @@ data class UnverifiedUserProfile(
 data class Document(
     val id: Int,
     val name: String
+)
+
+@Serializable
+data class UserVerificationResponseBody(
+    val statusCode: Int,
+    val message: String,
+    val data: VerifiedUserProfile
+)
+
+@Serializable
+data class VerifiedUserProfile(
+    val profile: UserVerificationProfile
+)
+
+@Serializable
+data class UnverifiedUserResponseBody(
+    val statusCode: Int,
+    val message: String,
+    val data: UnverifiedUserProfile
+)
+
+@Serializable
+data class UnverifiedUserProfile(
+    val profiles: UserVerificationProfile
 )
 

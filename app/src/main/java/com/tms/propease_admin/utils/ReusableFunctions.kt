@@ -1,15 +1,6 @@
 package com.tms.propease_admin.utils
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -21,6 +12,13 @@ enum class ExecutionStatus {
 }
 
 enum class VerificationStatus {
+    INITIAL,
+    LOADING,
+    SUCCESS,
+    FAIL
+}
+
+enum class EditStatus {
     INITIAL,
     LOADING,
     SUCCESS,

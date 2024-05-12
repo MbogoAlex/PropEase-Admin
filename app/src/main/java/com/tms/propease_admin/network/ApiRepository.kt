@@ -2,15 +2,19 @@ package com.tms.propease_admin.network
 
 import com.tms.propease_admin.model.CategoryResponseBody
 import com.tms.propease_admin.model.FilteredPropertiesResponseBody
+import com.tms.propease_admin.model.NewCategoryRequestBody
+import com.tms.propease_admin.model.NewCategoryResponseBody
 import com.tms.propease_admin.model.PropertiesResponseBody
 import com.tms.propease_admin.model.PropertyResponseBody
 import com.tms.propease_admin.model.PropertyVerificationRequestBody
 import com.tms.propease_admin.model.PropertyVerificationResponseBody
+import com.tms.propease_admin.model.UnverifiedUserResponseBody
 import com.tms.propease_admin.model.UnverifiedUsersResponseBody
 import com.tms.propease_admin.model.UserLoginRequestBody
 import com.tms.propease_admin.model.UserLoginResponseBody
 import com.tms.propease_admin.model.UserRegistrationRequestBody
 import com.tms.propease_admin.model.UserRegistrationResponseBody
+import com.tms.propease_admin.model.UserVerificationResponseBody
 import retrofit2.Response
 
 interface ApiRepository {
@@ -30,6 +34,21 @@ interface ApiRepository {
     suspend fun getCategories(): Response<CategoryResponseBody>
 
     suspend fun getFilteredLiveProperties(location: String, rooms: String, categoryId: String): Response<FilteredPropertiesResponseBody>
+
+    suspend fun verifyUser(
+        token: String,
+        userId: Int
+    ): Response<UserVerificationResponseBody>
+
+    suspend fun getUnverifiedUser(
+        token: String,
+        userId: Int
+    ): Response<UnverifiedUserResponseBody>
+
+    suspend fun createCategory(
+        token: String,
+        categoryRequestBody: NewCategoryRequestBody
+    ): Response<NewCategoryResponseBody>
 }
 
 class NetworkRepository(private val apiService: ApiService): ApiRepository {
@@ -91,6 +110,30 @@ class NetworkRepository(private val apiService: ApiService): ApiRepository {
         location = location,
         rooms = rooms,
         categoryId = categoryId
+    )
+
+    override suspend fun verifyUser(
+        token: String,
+        userId: Int
+    ): Response<UserVerificationResponseBody> = apiService.verifyUser(
+        token = "Bearer $token",
+        userId = userId
+    )
+
+    override suspend fun getUnverifiedUser(
+        token: String,
+        userId: Int
+    ): Response<UnverifiedUserResponseBody> = apiService.getUnverifiedUser(
+        token = "Bearer $token",
+        userId = userId
+    )
+
+    override suspend fun createCategory(
+        token: String,
+        categoryRequestBody: NewCategoryRequestBody
+    ): Response<NewCategoryResponseBody> = apiService.createCategory(
+        token = "Bearer $token",
+        categoryRequestBody = categoryRequestBody
     )
 
 }

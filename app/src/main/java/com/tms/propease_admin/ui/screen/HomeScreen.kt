@@ -64,7 +64,9 @@ object HomeScreenDestination: AppNavigation {
 @Composable
 fun HomeScreenComposable(
     navigateToHomeScreenWithoutArgs: () -> Unit,
-    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
+    navigateToSpecificUser: (userIndex: String) -> Unit,
+    navigateToHomeScreenWithArgs: (childScreen: String) -> Unit,
 ) {
     val viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
@@ -163,7 +165,9 @@ fun HomeScreenComposable(
             navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
             clearChildScreen = {
                 viewModel.clearChildScreen()
-            }
+            },
+            navigateToSpecificUser = navigateToSpecificUser,
+            navigateToHomeScreenWithArgs = navigateToHomeScreenWithArgs
         )
     }
 }
@@ -181,6 +185,8 @@ fun HomeScreen(
     loggedOutProfileScreens: List<ProfileScreenNavigationItem>,
     navigateToHomeScreenWithoutArgs: () -> Unit,
     navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
+    navigateToSpecificUser: (userIndex: String) -> Unit,
+    navigateToHomeScreenWithArgs: (childScreen: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -198,6 +204,11 @@ fun HomeScreen(
     } else if(childScreen == "unverified-properties-screen") {
         currentScreen = Screen.UNVERIFIED_PROPERTIES
         clearChildScreen()
+    } else if(childScreen == "unverified-users-screen") {
+        currentScreen = Screen.UNVERIFIED_USERS
+        clearChildScreen
+    } else if(childScreen == "categories-screen") {
+        currentScreen = Screen.CATEGORIES
     }
 
     ModalNavigationDrawer(
@@ -461,11 +472,14 @@ fun HomeScreen(
                 Screen.ARCHIVED_PROPERTIES -> {
                 }
                 Screen.CATEGORIES -> {
-                    CategoriesScreenComposable()
+                    CategoriesScreenComposable(
+                        navigateToHomeScreenWithArgs = navigateToHomeScreenWithArgs
+                    )
                 }
                 Screen.UNVERIFIED_USERS -> {
                     UnverifiedUsersScreenComposable(
-                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs
+                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
+                        navigateToSpecificUser = navigateToSpecificUser
                     )
                 }
                 Screen.NOTIFICATIONS -> {}
@@ -570,7 +584,9 @@ fun HomeScreenPreview() {
             loggedOutProfileScreens = loggedOutProfileScreens,
             navigateToHomeScreenWithoutArgs = {},
             navigateToSpecificPropertyScreen = {},
-            clearChildScreen = {}
+            clearChildScreen = {},
+            navigateToSpecificUser = {},
+            navigateToHomeScreenWithArgs = {}
         )
     }
 }

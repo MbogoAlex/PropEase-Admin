@@ -19,3 +19,20 @@ data class CategoryItem(
     val id: Int,
     val name: String
 )
+
+@Serializable
+data class NewCategoryRequestBody(
+    val name: String
+)
+
+@Serializable
+data class NewCategoryResponseBody(
+    val statusCode: Int,
+    val message: String,
+    val data: CategoryDt
+)
+
+@Serializable
+data class CategoryDt(
+    val category: CategoryItem
+)

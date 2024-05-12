@@ -1,20 +1,18 @@
 package com.tms.propease_admin.ui.screen.user
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tms.propease_admin.appDataStore.DSRepository
-import com.tms.propease_admin.model.Document
-import com.tms.propease_admin.model.UnverifiedUserProfile
 import com.tms.propease_admin.model.UserProfile
+import com.tms.propease_admin.model.UserVerificationProfile
 import com.tms.propease_admin.network.ApiRepository
 import com.tms.propease_admin.utils.ExecutionStatus
 import com.tms.propease_admin.utils.UserDetails
-import com.tms.propease_admin.utils.VerificationStatus
 import com.tms.propease_admin.utils.toUserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -22,7 +20,7 @@ val unverifiedUser = UserProfile(
     id = 1,
     email = "abc@gmail.com",
     phoneNumber = "12345678",
-    imageUrl = "",
+    imageUrl = null,
     approvalStatus = "UNAPPROVED",
     approved = false,
     roles = roles,
@@ -30,12 +28,8 @@ val unverifiedUser = UserProfile(
     lname = "Michael"
 )
 
-val unverifiedUserDt = UnverifiedUserProfile(
-    documents = emptyList(),
-    user = unverifiedUser
-)
 data class UnverifiedUsersScreenUiState(
-    val users: List<UnverifiedUserProfile> = emptyList(),
+    val users: List<UserVerificationProfile> = emptyList(),
     val unverifiedUsers: List<UserProfile> = emptyList(),
 //    val verificationStatus: VerificationStatus = VerificationStatus.INITIAL,
     val userDetails: UserDetails = UserDetails(),
@@ -69,6 +63,7 @@ class UnverifiedUsersScreenViewModel(
             )
         }
         viewModelScope.launch {
+            Log.i("YOUR_TOKEN", uiState.value.userDetails.token)
             try {
                 val response = apiRepository.getUnverifiedUsers(
                     token = uiState.value.userDetails.token

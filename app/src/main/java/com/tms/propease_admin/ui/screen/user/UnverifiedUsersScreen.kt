@@ -1,6 +1,7 @@
 package com.tms.propease_admin.ui.screen.user
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,10 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -102,6 +105,7 @@ val users = listOf<UserProfile>(
 @Composable
 fun UnverifiedUsersScreenComposable(
     navigateToHomeScreenWithoutArgs: () -> Unit,
+    navigateToSpecificUser: (userId: String) -> Unit,
 ) {
     BackHandler(onBack = navigateToHomeScreenWithoutArgs)
     val viewModel: UnverifiedUsersScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
@@ -110,6 +114,7 @@ fun UnverifiedUsersScreenComposable(
 
     Box {
         UnverifiedUsersScreen(
+            navigateToSpecificUser = navigateToSpecificUser,
             users = uiState.unverifiedUsers
         )
     }
@@ -118,17 +123,23 @@ fun UnverifiedUsersScreenComposable(
 @Composable
 fun UnverifiedUsersScreen(
     users: List<UserProfile>,
+    navigateToSpecificUser: (userId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        Text(
+            text = "Unverified users",
+            fontWeight = FontWeight.Bold
+        )
         LazyColumn {
             items(users) {
                 SingleUserCell(
                     userProfile = it,
-                    approved = it.approved
+                    approved = it.approved,
+                    navigateToSpecificUser = navigateToSpecificUser
                 )
             }
         }
@@ -139,12 +150,14 @@ fun UnverifiedUsersScreen(
 fun SingleUserCell(
     userProfile: UserProfile,
     approved: Boolean,
+    navigateToSpecificUser: (userId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(10.dp)
+            .clickable { navigateToSpecificUser(userProfile.id.toString()) }
     ) {
         Column(
             modifier = modifier
@@ -162,7 +175,18 @@ fun SingleUserCell(
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = "Role: ${userProfile.roles[0].name}")
+            Row {
+                Text(text = "Role: ${userProfile.roles[0].name}")
+                Spacer(modifier = Modifier.weight(1f))
+                IconButton(onClick = {
+                    navigateToSpecificUser(userProfile.id.toString())
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = "${userProfile.fname} ${userProfile.lname}"
+                    )
+                }
+            }
             if(!approved) {
                 Spacer(modifier = Modifier.height(10.dp))
                 Card(
@@ -194,7 +218,8 @@ fun SingleUserCell(
 fun UnverifiedUsersScreenPreview() {
     PropEaseAdminTheme {
         UnverifiedUsersScreen(
-            users = users
+            users = users,
+            navigateToSpecificUser = {}
         )
     }
 }

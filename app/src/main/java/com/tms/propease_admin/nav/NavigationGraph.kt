@@ -18,6 +18,8 @@ import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenComp
 import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenDestination
 import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenComposable
 import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenDestination
+import com.tms.propease_admin.ui.screen.user.UserDetailsScreenComposable
+import com.tms.propease_admin.ui.screen.user.UserDetailsScreenDestination
 
 @Composable
 fun NavigationGraph(
@@ -89,6 +91,12 @@ fun NavigationGraph(
                 },
                 navigateToSpecificPropertyScreen = {
                     navController.navigate("${PropertyDetailsScreenDestination.route}/${it}")
+                },
+                navigateToSpecificUser = {
+                    navController.navigate("${UserDetailsScreenDestination.route}/${it}")
+                },
+                navigateToHomeScreenWithArgs = {
+                    navController.navigate("${HomeScreenDestination.route}/${it}")
                 }
             )
         }
@@ -126,6 +134,29 @@ fun NavigationGraph(
                 },
                 navigateToSpecificPropertyScreen = {
                     navController.navigate("${PropertyDetailsScreenDestination.route}/${it}")
+                },
+                navigateToSpecificUser = {
+                    navController.navigate("${UserDetailsScreenDestination.route}/${it}")
+                },
+                navigateToHomeScreenWithArgs = {
+                    navController.navigate("${HomeScreenDestination.route}/${it}")
+                }
+            )
+        }
+        composable(
+            UserDetailsScreenDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(UserDetailsScreenDestination.userId) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            UserDetailsScreenComposable(
+                navigateToHomeScreenWithArgs = {
+                    navController.navigate("${HomeScreenDestination.route}/${it}")
+                },
+                navigateToPreviousScreen = {
+                    navController.navigateUp()
                 }
             )
         }

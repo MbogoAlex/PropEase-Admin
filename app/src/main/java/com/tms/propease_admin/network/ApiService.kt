@@ -2,15 +2,19 @@ package com.tms.propease_admin.network
 
 import com.tms.propease_admin.model.CategoryResponseBody
 import com.tms.propease_admin.model.FilteredPropertiesResponseBody
+import com.tms.propease_admin.model.NewCategoryRequestBody
+import com.tms.propease_admin.model.NewCategoryResponseBody
 import com.tms.propease_admin.model.PropertiesResponseBody
 import com.tms.propease_admin.model.PropertyResponseBody
 import com.tms.propease_admin.model.PropertyVerificationRequestBody
 import com.tms.propease_admin.model.PropertyVerificationResponseBody
+import com.tms.propease_admin.model.UnverifiedUserResponseBody
 import com.tms.propease_admin.model.UnverifiedUsersResponseBody
 import com.tms.propease_admin.model.UserLoginRequestBody
 import com.tms.propease_admin.model.UserLoginResponseBody
 import com.tms.propease_admin.model.UserRegistrationRequestBody
 import com.tms.propease_admin.model.UserRegistrationResponseBody
+import com.tms.propease_admin.model.UserVerificationResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -77,4 +81,22 @@ interface ApiService {
         @Query("rooms") rooms: String,
         @Query("categoryId") categoryId: String
     ): Response<FilteredPropertiesResponseBody>
+
+    @POST("profile/userId={userId}/verify")
+    suspend fun verifyUser(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Int
+    ): Response<UserVerificationResponseBody>
+
+    @GET("profile/userId={userId}/unverifiedUser")
+    suspend fun getUnverifiedUser(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Int
+    ): Response<UnverifiedUserResponseBody>
+
+    @POST("category/create")
+    suspend fun createCategory(
+        @Header("Authorization") token: String,
+        @Body categoryRequestBody: NewCategoryRequestBody
+    ): Response<NewCategoryResponseBody>
 }
