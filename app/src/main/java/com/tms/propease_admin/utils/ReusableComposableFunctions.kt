@@ -276,12 +276,9 @@ fun CategorySelection(
         dropDownIcon = Icons.Default.KeyboardArrowDown
     }
     Column {
-        Card(
+        Button(
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .clickable {
-                    expanded = !expanded
-                }
+            onClick = { expanded = !expanded }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -291,7 +288,6 @@ fun CategorySelection(
                 Text(
                     text = "Category".takeIf { categoryNameSelected.isEmpty() } ?: categoryNameSelected,
                     modifier = Modifier
-                        .padding(10.dp)
 //                        .widthIn(120.dp)
                 )
                 Icon(
@@ -325,11 +321,11 @@ fun CategorySelection(
 
 @Composable
 fun NumberOfRoomsSelection(
+    rooms: List<String>,
     numberOfRoomsSelected: String,
     onChangeNumberOfRooms: (rooms: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val rooms = listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8)
 //    var selectedRoom by remember {
 //        mutableIntStateOf(0)
 //    }
@@ -344,13 +340,23 @@ fun NumberOfRoomsSelection(
         dropDownIcon = Icons.Default.KeyboardArrowDown
     }
 
+    val defaultRooms = listOf(
+        "Bedsitter - Rental, Airbnb, On sale",
+        "One bedroom - Rental, Airbnb, On sale",
+        "Two bedrooms - Rental, Airbnb, On sale",
+        "Three bedrooms - Rental, Airbnb, On sale",
+        "Four bedrooms - Rental, Airbnb, On sale",
+        "Five bedrooms - Rental, Airbnb, On sale",
+        "Single room - Shop, Office, On sale",
+        "Two rooms - Shop, Office, On sale",
+        "Three rooms - Shop, Office, On sale",
+
+        )
+
     Column {
-        Card(
+        Button(
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .clickable {
-                    expanded = !expanded
-                }
+            onClick = { expanded = !expanded }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -358,10 +364,8 @@ fun NumberOfRoomsSelection(
             ) {
                 Text(
                     text = "No. Rooms".takeIf { numberOfRoomsSelected.isEmpty() }
-                        ?: "$numberOfRoomsSelected room".takeIf { numberOfRoomsSelected.toInt() == 1 }
-                        ?: "$numberOfRoomsSelected rooms",
+                        ?: numberOfRoomsSelected,
                     modifier = Modifier
-                        .padding(10.dp)
 //                        .widthIn(120.dp)
                 )
                 Icon(
@@ -374,21 +378,40 @@ fun NumberOfRoomsSelection(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            rooms.forEachIndexed { index, i ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = "1 room".takeIf { i == 1 } ?: "$i rooms"
-                        )
-                    },
-                    onClick = {
-                        onChangeNumberOfRooms(
-                            i.toString()
-                        )
+            if(rooms.isEmpty()) {
+                defaultRooms.forEachIndexed { index, i ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = i
+                            )
+                        },
+                        onClick = {
+                            onChangeNumberOfRooms(
+                                i
+                            )
 
-                        expanded = !expanded
-                    }
-                )
+                            expanded = !expanded
+                        }
+                    )
+                }
+            } else {
+                rooms.forEachIndexed { index, i ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = i
+                            )
+                        },
+                        onClick = {
+                            onChangeNumberOfRooms(
+                                i
+                            )
+
+                            expanded = !expanded
+                        }
+                    )
+                }
             }
         }
     }
@@ -429,6 +452,7 @@ fun LocationSearchForm(
 
 @Composable
 fun PropertiesFilterSection(
+    rooms: List<String>,
     filteringOn: Boolean,
     selectedLocation: String,
     categories: List<CategoryItem>,
@@ -465,6 +489,7 @@ fun PropertiesFilterSection(
                 )
         ) {
             NumberOfRoomsSelection(
+                rooms = rooms,
                 numberOfRoomsSelected = numberOfRoomsSelected,
                 onChangeNumberOfRooms = onChangeNumberOfRooms
             )

@@ -1,6 +1,7 @@
 package com.tms.propease_admin.ui.screen.property.category
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -67,7 +68,11 @@ val categories = listOf<CategoryItem>(
 @Composable
 fun CategoriesScreenComposable(
     navigateToHomeScreenWithArgs: (childScreen: String) -> Unit,
+    navigateToHomeScreenWithoutArgs: () -> Unit,
 ) {
+
+    BackHandler(onBack = navigateToHomeScreenWithoutArgs)
+
     val context = LocalContext.current
     val viewModel: CategoriesScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
@@ -121,6 +126,10 @@ fun CategoriesScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        Text(
+            text = "Categories",
+            fontWeight = FontWeight.Bold
+        )
         Row(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier
@@ -130,6 +139,7 @@ fun CategoriesScreen(
                 Text(text = "+ Category")
             }
         }
+
         LazyColumn {
             items(categories) {
                 CategoryItemCell(

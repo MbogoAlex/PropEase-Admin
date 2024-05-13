@@ -49,7 +49,7 @@ data class PropertyOwner(
     val email: String,
     val phoneNumber: String,
     val profilePic: String?,
-    val approved: Boolean,
+    val approved: Boolean?,
     val fname: String,
     val lname: String
 )

@@ -17,12 +17,18 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +41,8 @@ import com.tms.propease_admin.model.UserProfile
 import com.tms.propease_admin.model.UserRole
 import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenViewModel
 import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
+import com.tms.propease_admin.utils.ExecutionStatus
+import kotlinx.coroutines.delay
 
 
 val roles = listOf<UserRole>(
@@ -114,6 +122,7 @@ fun UnverifiedUsersScreenComposable(
 
     Box {
         UnverifiedUsersScreen(
+            executionStatus = uiState.executionStatus,
             navigateToSpecificUser = navigateToSpecificUser,
             users = uiState.unverifiedUsers
         )
@@ -123,9 +132,15 @@ fun UnverifiedUsersScreenComposable(
 @Composable
 fun UnverifiedUsersScreen(
     users: List<UserProfile>,
+    executionStatus: ExecutionStatus,
     navigateToSpecificUser: (userId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    var showText by remember {
+        mutableStateOf(false)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -134,13 +149,34 @@ fun UnverifiedUsersScreen(
             text = "Unverified users",
             fontWeight = FontWeight.Bold
         )
-        LazyColumn {
-            items(users) {
-                SingleUserCell(
-                    userProfile = it,
-                    approved = it.approved,
-                    navigateToSpecificUser = navigateToSpecificUser
-                )
+        if(executionStatus == ExecutionStatus.SUCCESS) {
+            if(users.isEmpty()) {
+                LaunchedEffect(Unit) {
+                    delay(2000L)
+                    showText = true
+                }
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    if(showText) {
+                        Text(text = "No unverified user")
+                    } else {
+                        CircularProgressIndicator()
+                    }
+                }
+            } else {
+                LazyColumn {
+                    items(users.size) {
+                        SingleUserCell(
+                            userProfile = users[it],
+                            approved = users[it].approved,
+                            navigateToSpecificUser = navigateToSpecificUser,
+                            index = it
+                        )
+                    }
+                }
             }
         }
     }
@@ -151,13 +187,14 @@ fun SingleUserCell(
     userProfile: UserProfile,
     approved: Boolean,
     navigateToSpecificUser: (userId: String) -> Unit,
+    index: Int,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .clickable { navigateToSpecificUser(userProfile.id.toString()) }
+            .clickable { navigateToSpecificUser(index.toString()) }
     ) {
         Column(
             modifier = modifier
@@ -179,7 +216,7 @@ fun SingleUserCell(
                 Text(text = "Role: ${userProfile.roles[0].name}")
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(onClick = {
-                    navigateToSpecificUser(userProfile.id.toString())
+                    navigateToSpecificUser(index.toString())
                 }) {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowRight,
@@ -218,6 +255,7 @@ fun SingleUserCell(
 fun UnverifiedUsersScreenPreview() {
     PropEaseAdminTheme {
         UnverifiedUsersScreen(
+            executionStatus = ExecutionStatus.INITIAL,
             users = users,
             navigateToSpecificUser = {}
         )

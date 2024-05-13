@@ -14,6 +14,7 @@ import com.tms.propease_admin.model.UserLoginRequestBody
 import com.tms.propease_admin.model.UserLoginResponseBody
 import com.tms.propease_admin.model.UserRegistrationRequestBody
 import com.tms.propease_admin.model.UserRegistrationResponseBody
+import com.tms.propease_admin.model.UserResponseBody
 import com.tms.propease_admin.model.UserVerificationResponseBody
 import retrofit2.Response
 
@@ -49,6 +50,11 @@ interface ApiRepository {
         token: String,
         categoryRequestBody: NewCategoryRequestBody
     ): Response<NewCategoryResponseBody>
+
+    suspend fun getUser(
+        token: String,
+        userId: Int
+    ): Response<UserResponseBody>
 }
 
 class NetworkRepository(private val apiService: ApiService): ApiRepository {
@@ -134,6 +140,11 @@ class NetworkRepository(private val apiService: ApiService): ApiRepository {
     ): Response<NewCategoryResponseBody> = apiService.createCategory(
         token = "Bearer $token",
         categoryRequestBody = categoryRequestBody
+    )
+
+    override suspend fun getUser(token: String, userId: Int): Response<UserResponseBody> = apiService.getUser(
+        token = "Bearer $token",
+        userId = userId
     )
 
 }

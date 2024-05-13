@@ -9,6 +9,7 @@ import com.tms.propease_admin.network.ApiRepository
 import com.tms.propease_admin.ui.screen.HomeScreenViewModel
 import com.tms.propease_admin.ui.screen.SplashScreenViewModel
 import com.tms.propease_admin.ui.screen.accountManagement.LoginScreenViewModel
+import com.tms.propease_admin.ui.screen.accountManagement.ProfileScreenViewModel
 import com.tms.propease_admin.ui.screen.accountManagement.RegistrationScreenViewModel
 import com.tms.propease_admin.ui.screen.property.PropertyDetailsScreenViewModel
 import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenViewModel
@@ -126,6 +127,16 @@ object AppViewModelFactory {
             val apiRepository = propEaseApplication().container.apiRepository
             val dsRepository = propEaseApplication().dsRepository
             CategoriesScreenViewModel(
+                apiRepository = apiRepository,
+                dsRepository = dsRepository
+            )
+        }
+
+        // initialize ProfileScreenViewModel
+        initializer {
+            val apiRepository = propEaseApplication().container.apiRepository
+            val dsRepository = propEaseApplication().dsRepository
+            ProfileScreenViewModel(
                 apiRepository = apiRepository,
                 dsRepository = dsRepository
             )

@@ -42,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tms.propease_admin.AppViewModelFactory
 import com.tms.propease_admin.R
 import com.tms.propease_admin.nav.AppNavigation
+import com.tms.propease_admin.ui.screen.accountManagement.ProfileScreenComposable
 import com.tms.propease_admin.ui.screen.property.UnverifiedPropertiesScreenComposable
 import com.tms.propease_admin.ui.screen.property.VerifiedLivePropertiesScreenComposable
 import com.tms.propease_admin.ui.screen.property.VerifiedNotLivePropertiesScreenComposable
@@ -67,6 +68,8 @@ fun HomeScreenComposable(
     navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     navigateToSpecificUser: (userIndex: String) -> Unit,
     navigateToHomeScreenWithArgs: (childScreen: String) -> Unit,
+    navigateToLoginScreenWithoutArgs: () -> Unit,
+    navigateToLoginScreenWithArgs: (phoneNumber: String, password: String) -> Unit,
 ) {
     val viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
@@ -167,7 +170,9 @@ fun HomeScreenComposable(
                 viewModel.clearChildScreen()
             },
             navigateToSpecificUser = navigateToSpecificUser,
-            navigateToHomeScreenWithArgs = navigateToHomeScreenWithArgs
+            navigateToHomeScreenWithArgs = navigateToHomeScreenWithArgs,
+            navigateToLoginScreenWithoutArgs = navigateToLoginScreenWithoutArgs,
+            navigateToLoginScreenWithArgs = navigateToLoginScreenWithArgs
         )
     }
 }
@@ -184,9 +189,11 @@ fun HomeScreen(
     loggedInProfileScreens: List<ProfileScreenNavigationItem>,
     loggedOutProfileScreens: List<ProfileScreenNavigationItem>,
     navigateToHomeScreenWithoutArgs: () -> Unit,
+    navigateToLoginScreenWithoutArgs: () -> Unit,
     navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     navigateToSpecificUser: (userIndex: String) -> Unit,
     navigateToHomeScreenWithArgs: (childScreen: String) -> Unit,
+    navigateToLoginScreenWithArgs: (phoneNumber: String, password: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -455,7 +462,10 @@ fun HomeScreen(
             }
             when(currentScreen) {
                 Screen.VERIFIED_LIVE_PROPERTIES -> {
-                    VerifiedLivePropertiesScreenComposable()
+                    VerifiedLivePropertiesScreenComposable(
+                        navigateToLoginScreenWithArgs = navigateToLoginScreenWithArgs,
+                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
+                    )
                 }
                 Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {
                     VerifiedNotLivePropertiesScreenComposable(
@@ -470,10 +480,18 @@ fun HomeScreen(
                     )
                 }
                 Screen.ARCHIVED_PROPERTIES -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        Text(text = "Archived properties")
+                    }
                 }
                 Screen.CATEGORIES -> {
                     CategoriesScreenComposable(
-                        navigateToHomeScreenWithArgs = navigateToHomeScreenWithArgs
+                        navigateToHomeScreenWithArgs = navigateToHomeScreenWithArgs,
+                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs
                     )
                 }
                 Screen.UNVERIFIED_USERS -> {
@@ -482,8 +500,21 @@ fun HomeScreen(
                         navigateToSpecificUser = navigateToSpecificUser
                     )
                 }
-                Screen.NOTIFICATIONS -> {}
-                Screen.PROFILE -> {}
+                Screen.NOTIFICATIONS -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        Text(text = "Notifications screen")
+                    }
+                }
+                Screen.PROFILE -> {
+                    ProfileScreenComposable(
+                        navigateToLoginScreenWithoutArgs = navigateToLoginScreenWithoutArgs,
+                        navigateToLoginScreenWithArgs = navigateToLoginScreenWithArgs
+                    )
+                }
                 Screen.LOGIN -> {}
                 Screen.LOGOUT -> {}
                 else -> {}
@@ -586,7 +617,9 @@ fun HomeScreenPreview() {
             navigateToSpecificPropertyScreen = {},
             clearChildScreen = {},
             navigateToSpecificUser = {},
-            navigateToHomeScreenWithArgs = {}
+            navigateToHomeScreenWithArgs = {},
+            navigateToLoginScreenWithoutArgs = {},
+            navigateToLoginScreenWithArgs = {phoneNumber, password ->  }
         )
     }
 }

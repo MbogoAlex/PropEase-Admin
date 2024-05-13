@@ -14,6 +14,7 @@ import com.tms.propease_admin.model.UserLoginRequestBody
 import com.tms.propease_admin.model.UserLoginResponseBody
 import com.tms.propease_admin.model.UserRegistrationRequestBody
 import com.tms.propease_admin.model.UserRegistrationResponseBody
+import com.tms.propease_admin.model.UserResponseBody
 import com.tms.propease_admin.model.UserVerificationResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -99,4 +100,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body categoryRequestBody: NewCategoryRequestBody
     ): Response<NewCategoryResponseBody>
+
+    @GET("profile/userId={userId}/user")
+    suspend fun getUser(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Int
+    ): Response<UserResponseBody>
 }

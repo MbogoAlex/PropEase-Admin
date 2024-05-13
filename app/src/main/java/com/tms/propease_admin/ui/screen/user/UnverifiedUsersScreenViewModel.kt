@@ -79,12 +79,14 @@ class UnverifiedUsersScreenViewModel(
                             executionStatus = ExecutionStatus.SUCCESS
                         )
                     }
+                    Log.i("USERS_FETCH", "SUCCESS")
                 } else {
                     _uiState.update {
                         it.copy(
                             executionStatus = ExecutionStatus.FAIL
                         )
                     }
+                    Log.e("USERS_FETCH_ERROR_RESPONSE", response.toString())
                 }
             }catch (e:Exception) {
                 _uiState.update {
@@ -92,6 +94,7 @@ class UnverifiedUsersScreenViewModel(
                         executionStatus = ExecutionStatus.FAIL
                     )
                 }
+                Log.e("USERS_FETCH_ERROR_EXCEPTION", e.toString())
             }
         }
     }

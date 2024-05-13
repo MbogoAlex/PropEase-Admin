@@ -18,6 +18,13 @@ enum class VerificationStatus {
     FAIL
 }
 
+enum class LoadingStatus {
+    INITIAL,
+    LOADING,
+    SUCCESS,
+    FAIL
+}
+
 enum class EditStatus {
     INITIAL,
     LOADING,

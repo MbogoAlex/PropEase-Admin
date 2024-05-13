@@ -97,6 +97,12 @@ fun NavigationGraph(
                 },
                 navigateToHomeScreenWithArgs = {
                     navController.navigate("${HomeScreenDestination.route}/${it}")
+                },
+                navigateToLoginScreenWithoutArgs = {
+                    navController.navigate(LoginScreenDestination.route)
+                },
+                navigateToLoginScreenWithArgs = {phoneNumber, password ->
+                    navController.navigate("${LoginScreenDestination.route}/${phoneNumber}/${password}")
                 }
             )
         }
@@ -140,6 +146,12 @@ fun NavigationGraph(
                 },
                 navigateToHomeScreenWithArgs = {
                     navController.navigate("${HomeScreenDestination.route}/${it}")
+                },
+                navigateToLoginScreenWithoutArgs = {
+                    navController.navigate(LoginScreenDestination.route)
+                },
+                navigateToLoginScreenWithArgs = {phoneNumber, password ->
+                    navController.navigate("${LoginScreenDestination.route}/${phoneNumber}/${password}")
                 }
             )
         }

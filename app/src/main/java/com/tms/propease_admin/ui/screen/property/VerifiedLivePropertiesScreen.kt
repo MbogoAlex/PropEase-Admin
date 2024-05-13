@@ -174,6 +174,8 @@ val properties = listOf<PropertyDetails>(
 
 @Composable
 fun VerifiedLivePropertiesScreenComposable(
+    navigateToLoginScreenWithArgs: (phoneNumber: String, password: String) -> Unit,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val activity = (LocalContext.current as? Activity)
@@ -185,8 +187,17 @@ fun VerifiedLivePropertiesScreenComposable(
     val viewModel: VerifiedLivePropertiesScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
 
+    if(uiState.loadPropertiesStatusCode == 401) {
+        navigateToLoginScreenWithArgs(
+            uiState.userDetails.phoneNumber,
+            uiState.userDetails.password
+        )
+        viewModel.changeStatusCode()
+    }
+
     Box {
         VerifiedLivePropertiesScreen(
+            rooms = uiState.rooms,
             properties = uiState.properties,
             filteringOn = uiState.filteringOn,
             selectedLocation = uiState.locationSelected,
@@ -202,11 +213,14 @@ fun VerifiedLivePropertiesScreenComposable(
             onChangeCategory = {
                 viewModel.filterByCategory(it)
             },
-            undoFilter = { viewModel.undoFiltering() })
+            undoFilter = { viewModel.undoFiltering() },
+            navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
+        )
     }
 }
 @Composable
 fun VerifiedLivePropertiesScreen(
+    rooms: List<String>,
     properties: List<PropertyDetails>,
     filteringOn: Boolean,
     selectedLocation: String,
@@ -217,6 +231,7 @@ fun VerifiedLivePropertiesScreen(
     onChangeNumberOfRooms: (rooms: String) -> Unit,
     onChangeCategory: (categoryItem: CategoryItem) -> Unit,
     undoFilter: () -> Unit,
+    navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -225,6 +240,7 @@ fun VerifiedLivePropertiesScreen(
     ) {
         Column {
             PropertiesFilterSection(
+                rooms = rooms,
                 filteringOn = filteringOn,
                 selectedLocation = selectedLocation,
                 categories = categories,
@@ -238,7 +254,7 @@ fun VerifiedLivePropertiesScreen(
             Spacer(modifier = Modifier.height(16.dp))
             PropertiesDisplay(
                 properties = properties,
-                navigateToSpecificPropertyScreen = {},
+                navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
                 executionStatus = ExecutionStatus.SUCCESS
             )
         }
@@ -251,6 +267,7 @@ fun VerifiedLivePropertiesScreen(
 fun LivePropertiesScreenPreview(){
     PropEaseAdminTheme {
         VerifiedLivePropertiesScreen(
+            rooms = emptyList(),
             properties = properties,
             filteringOn = false,
             selectedLocation = "",
@@ -260,6 +277,8 @@ fun LivePropertiesScreenPreview(){
             onSearchLocationChanged = {},
             onChangeNumberOfRooms = {},
             onChangeCategory = {},
-            undoFilter = { /*TODO*/ })
+            undoFilter = { /*TODO*/ },
+            navigateToSpecificPropertyScreen = {}
+        )
     }
 }

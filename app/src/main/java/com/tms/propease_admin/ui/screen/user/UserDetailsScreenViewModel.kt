@@ -27,6 +27,7 @@ data class UserDetailsScreenUiState(
     val userDetails: UserDetails = UserDetails(),
     val idFront: String = "",
     val idBack: String = "",
+    val userId: Int = 0,
     val executionStatus: ExecutionStatus = ExecutionStatus.INITIAL
 )
 class UserDetailsScreenViewModel(
@@ -37,7 +38,7 @@ class UserDetailsScreenViewModel(
     private val _uiState = MutableStateFlow(value = UserDetailsScreenUiState())
     val uiState: StateFlow<UserDetailsScreenUiState> = _uiState.asStateFlow()
 
-    private val userId: String? = savedStateHandle[UserDetailsScreenDestination.userId]
+    private val index: String? = savedStateHandle[UserDetailsScreenDestination.userId]
 
     fun loadStartUpData() {
         viewModelScope.launch {
@@ -60,17 +61,21 @@ class UserDetailsScreenViewModel(
         }
         viewModelScope.launch {
             try {
-                val response = apiRepository.getUnverifiedUser(
-                    token = uiState.value.userDetails.token,
-                    userId = userId!!.toInt()
+                val response = apiRepository.getUnverifiedUsers(
+                    token = uiState.value.userDetails.token
                 )
+//                val response = apiRepository.getUnverifiedUser(
+//                    token = uiState.value.userDetails.token,
+//                    userId = userId!!.toInt()
+//                )
                 if(response.isSuccessful) {
                     Log.i("UNVERIFIED_USER", response.body()?.data?.profiles!!.toString())
                     _uiState.update {
                         it.copy(
-                            unverifiedUser = response.body()?.data?.profiles!!,
-                            idFront = response.body()?.data?.profiles!!.documents[0].name,
-                            idBack = if(response.body()?.data?.profiles!!.documents.size == 1) "" else  response.body()?.data?.profiles!!.documents[1].name,
+                            unverifiedUser = response.body()?.data?.profiles!![index!!.toInt()],
+                            userId = response.body()?.data?.profiles!![index!!.toInt()].user.id,
+                            idFront = response.body()?.data?.profiles!![index!!.toInt()].documents[0].name,
+                            idBack = if(response.body()?.data?.profiles!![index!!.toInt()].documents.size == 1) "" else  response.body()?.data?.profiles!![index!!.toInt()].documents[1].name,
                             executionStatus = ExecutionStatus.SUCCESS
                         )
                     }
@@ -103,7 +108,7 @@ class UserDetailsScreenViewModel(
             try {
                var response = apiRepository.verifyUser(
                    token = uiState.value.userDetails.token,
-                   userId = userId!!.toInt()
+                   userId = uiState.value.userId
                )
                 if(response.isSuccessful) {
                     _uiState.update {
