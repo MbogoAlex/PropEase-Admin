@@ -488,16 +488,16 @@ fun PropertiesFilterSection(
                     )
                 )
         ) {
-            NumberOfRoomsSelection(
-                rooms = rooms,
-                numberOfRoomsSelected = numberOfRoomsSelected,
-                onChangeNumberOfRooms = onChangeNumberOfRooms
-            )
-            Spacer(modifier = Modifier.width(10.dp))
             CategorySelection(
                 categories = categories,
                 categoryNameSelected = categoryNameSelected,
                 onChangeCategory = onChangeCategory
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            NumberOfRoomsSelection(
+                rooms = rooms,
+                numberOfRoomsSelected = numberOfRoomsSelected,
+                onChangeNumberOfRooms = onChangeNumberOfRooms
             )
             Spacer(modifier = Modifier.weight(1f))
             if(filteringOn) {
@@ -674,6 +674,8 @@ fun PropertyInfo(
     onRejectPropertyClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val parts = property.postedDate.split(" ")
+    val postedDate = parts[0]
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -714,13 +716,13 @@ fun PropertyInfo(
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
-                    text = "${property.rooms} room".takeIf { it.length == 1 } ?: "${property.rooms} rooms",
+                    text = property.rooms,
                     fontSize = 14.sp
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "Posted on ${property.postedDate}",
+                text = "Posted on $postedDate",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Light
             )

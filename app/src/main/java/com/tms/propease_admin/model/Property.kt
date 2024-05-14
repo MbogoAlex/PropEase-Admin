@@ -31,7 +31,7 @@ data class PropertyDetails(
     val title: String,
     val description: String,
     val category: String,
-    val rooms: Int,
+    val rooms: String,
     val price: Double,
     val approved: Boolean,
     val paid: Boolean,
