@@ -229,30 +229,55 @@ fun PropertyItem(
 
                         )
                     }
-                } else if(approved && !paid) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.Gray
-                        ),
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(
-                            text = "unpaid".uppercase(),
-                            fontSize = 11.sp,
-                            color = Color.White,
-                            modifier = Modifier
-                                .padding(
-                                    start = 10.dp,
-                                    top = 5.dp,
-                                    end = 10.dp,
-                                    bottom = 5.dp,
-                                )
-
-                        )
-                    }
                 }
+
+//                if(!approved) {
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    Card(
+//                        colors = CardDefaults.cardColors(
+//                            containerColor = Color.Gray
+//                        ),
+//                        modifier = Modifier
+//                            .align(Alignment.CenterHorizontally)
+//                    ) {
+//                        Text(
+//                            text = "Unverified".uppercase(),
+//                            fontSize = 11.sp,
+//                            color = Color.White,
+//                            modifier = Modifier
+//                                .padding(
+//                                    start = 10.dp,
+//                                    top = 5.dp,
+//                                    end = 10.dp,
+//                                    bottom = 5.dp,
+//                                )
+//
+//                        )
+//                    }
+//                } else if(approved && !paid) {
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    Card(
+//                        colors = CardDefaults.cardColors(
+//                            containerColor = Color.Gray
+//                        ),
+//                        modifier = Modifier
+//                            .align(Alignment.CenterHorizontally)
+//                    ) {
+//                        Text(
+//                            text = "unpaid".uppercase(),
+//                            fontSize = 11.sp,
+//                            color = Color.White,
+//                            modifier = Modifier
+//                                .padding(
+//                                    start = 10.dp,
+//                                    top = 5.dp,
+//                                    end = 10.dp,
+//                                    bottom = 5.dp,
+//                                )
+//
+//                        )
+//                    }
+//                }
             }
         }
     }

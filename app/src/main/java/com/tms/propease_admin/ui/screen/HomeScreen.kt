@@ -83,12 +83,12 @@ fun HomeScreenComposable(
             screen = Screen.VERIFIED_LIVE_PROPERTIES,
             color = Color.Gray
         ),
-        PropertyScreenNavigationItem(
-            title = "Verified - not live properties",
-            icon = R.drawable.house,
-            screen = Screen.VERIFIED_NOT_LIVE_PROPERTIES,
-            color = Color.Red
-        ),
+//        PropertyScreenNavigationItem(
+//            title = "Verified - not live properties",
+//            icon = R.drawable.house,
+//            screen = Screen.VERIFIED_NOT_LIVE_PROPERTIES,
+//            color = Color.Red
+//        ),
         PropertyScreenNavigationItem(
             title = "Unverified properties",
             icon = R.drawable.house,
@@ -206,7 +206,7 @@ fun HomeScreen(
     }
 
     if(childScreen == "verified-not-live-properties-screen") {
-        currentScreen = Screen.VERIFIED_NOT_LIVE_PROPERTIES
+//        currentScreen = Screen.VERIFIED_NOT_LIVE_PROPERTIES
         clearChildScreen()
     } else if(childScreen == "unverified-properties-screen") {
         currentScreen = Screen.UNVERIFIED_PROPERTIES
@@ -467,12 +467,12 @@ fun HomeScreen(
                         navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
                     )
                 }
-                Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {
-                    VerifiedNotLivePropertiesScreenComposable(
-                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
-                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
-                    )
-                }
+//                Screen.VERIFIED_NOT_LIVE_PROPERTIES -> {
+//                    VerifiedNotLivePropertiesScreenComposable(
+//                        navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
+//                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
+//                    )
+//                }
                 Screen.UNVERIFIED_PROPERTIES -> {
                     UnverifiedPropertiesScreenComposable(
                         navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
@@ -533,12 +533,12 @@ fun HomeScreenPreview() {
             screen = Screen.VERIFIED_LIVE_PROPERTIES,
             color = Color.Gray
         ),
-        PropertyScreenNavigationItem(
-            title = "Verified - not live properties",
-            icon = R.drawable.house,
-            screen = Screen.VERIFIED_NOT_LIVE_PROPERTIES,
-            color = Color.Red
-        ),
+//        PropertyScreenNavigationItem(
+//            title = "Verified - not live properties",
+//            icon = R.drawable.house,
+//            screen = Screen.VERIFIED_NOT_LIVE_PROPERTIES,
+//            color = Color.Red
+//        ),
         PropertyScreenNavigationItem(
             title = "Unverified properties",
             icon = R.drawable.house,

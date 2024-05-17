@@ -80,11 +80,7 @@ fun PropertyDetailsScreenComposable(
 
     if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyVerified) {
         Toast.makeText(context, "Property verified", Toast.LENGTH_SHORT).show()
-        if(uiState.property.paid) {
-            navigateToHomeScreenWithoutArgs()
-        } else if(!uiState.property.paid) {
-            navigateToHomeScreenWithArgs("verified-not-live-properties-screen")
-        }
+        navigateToHomeScreenWithoutArgs()
         viewModel.resetVerificationStatus()
     } else if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyUnVerified) {
         Toast.makeText(context, "Property unverified", Toast.LENGTH_SHORT).show()
@@ -94,6 +90,23 @@ fun PropertyDetailsScreenComposable(
         Toast.makeText(context, uiState.verificationMessage, Toast.LENGTH_SHORT).show()
         viewModel.resetVerificationStatus()
     }
+
+//    if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyVerified) {
+//        Toast.makeText(context, "Property verified", Toast.LENGTH_SHORT).show()
+//        if(uiState.property.paid) {
+//            navigateToHomeScreenWithoutArgs()
+//        } else if(!uiState.property.paid) {
+//            navigateToHomeScreenWithArgs("verified-not-live-properties-screen")
+//        }
+//        viewModel.resetVerificationStatus()
+//    } else if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyUnVerified) {
+//        Toast.makeText(context, "Property unverified", Toast.LENGTH_SHORT).show()
+//        navigateToHomeScreenWithArgs("unverified-properties-screen")
+//        viewModel.resetVerificationStatus()
+//    } else if(uiState.executionStatus == ExecutionStatus.FAIL) {
+//        Toast.makeText(context, uiState.verificationMessage, Toast.LENGTH_SHORT).show()
+//        viewModel.resetVerificationStatus()
+//    }
 
     if(approvePropertyDialog) {
         AlertDialog(
