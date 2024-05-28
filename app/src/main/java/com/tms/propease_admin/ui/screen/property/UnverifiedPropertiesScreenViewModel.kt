@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 data class UnverifiedPropertiesScreenUiState(
     val userDetails: UserDetails = UserDetails(),
     val properties: List<PropertyDetails> = emptyList(),
+    val forceLogin: Boolean = false,
     val executionStatus: ExecutionStatus = ExecutionStatus.INITIAL
 )
 class UnverifiedPropertiesScreenViewModel(
@@ -63,7 +64,8 @@ class UnverifiedPropertiesScreenViewModel(
                 } else {
                     _uiState.update {
                         it.copy(
-                            executionStatus = ExecutionStatus.FAIL
+                            executionStatus = ExecutionStatus.FAIL,
+                            forceLogin = true
                         )
                     }
                     Log.e("FETCH_UNVERIFIED_PROPERTIES_ERROR_RESPONSE", response.toString())
@@ -76,6 +78,14 @@ class UnverifiedPropertiesScreenViewModel(
                 }
                 Log.e("FETCH_UNVERIFIED_PROPERTIES_ERROR_EXCEPTION", e.toString())
             }
+        }
+    }
+
+    fun resetExecutionStatus() {
+        _uiState.update {
+            it.copy(
+                executionStatus = ExecutionStatus.INITIAL
+            )
         }
     }
 

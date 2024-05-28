@@ -476,7 +476,8 @@ fun HomeScreen(
                 Screen.UNVERIFIED_PROPERTIES -> {
                     UnverifiedPropertiesScreenComposable(
                         navigateToHomeScreenWithoutArgs = navigateToHomeScreenWithoutArgs,
-                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen
+                        navigateToSpecificPropertyScreen = navigateToSpecificPropertyScreen,
+                        navigateToLoginScreenWithArgs = navigateToLoginScreenWithArgs
                     )
                 }
                 Screen.ARCHIVED_PROPERTIES -> {

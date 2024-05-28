@@ -10,6 +10,7 @@ import com.tms.propease_admin.model.PropertyVerificationRequestBody
 import com.tms.propease_admin.network.ApiRepository
 import com.tms.propease_admin.utils.ExecutionStatus
 import com.tms.propease_admin.utils.UserDetails
+import com.tms.propease_admin.utils.VerificationStatus
 import com.tms.propease_admin.utils.toUserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,7 +42,8 @@ data class PropertyDetailsScreenUiState(
     val propertyVerified: Boolean = false,
     val propertyUnVerified: Boolean = false,
     val verificationMessage: String = "",
-    val executionStatus: ExecutionStatus = ExecutionStatus.INITIAL
+    val executionStatus: ExecutionStatus = ExecutionStatus.INITIAL,
+    val verificationStatus: VerificationStatus = VerificationStatus.INITIAL
 )
 class PropertyDetailsScreenViewModel(
     private val apiRepository: ApiRepository,
@@ -67,6 +69,11 @@ class PropertyDetailsScreenViewModel(
     }
 
     fun getPropertyDetails() {
+        _uiState.update {
+            it.copy(
+                executionStatus = ExecutionStatus.LOADING
+            )
+        }
         viewModelScope.launch {
             try {
                 val response = apiRepository.getPropertyDetails(
@@ -103,7 +110,7 @@ class PropertyDetailsScreenViewModel(
     fun verifyProperty() {
         _uiState.update {
             it.copy(
-                executionStatus = ExecutionStatus.LOADING
+                verificationStatus = VerificationStatus.LOADING
             )
         }
         viewModelScope.launch {
@@ -123,7 +130,7 @@ class PropertyDetailsScreenViewModel(
                 if(response.isSuccessful) {
                     _uiState.update {
                         it.copy(
-                            executionStatus = ExecutionStatus.SUCCESS,
+                            verificationStatus = VerificationStatus.SUCCESS,
                             propertyVerified = true
                         )
                     }
@@ -131,7 +138,7 @@ class PropertyDetailsScreenViewModel(
                 } else {
                     _uiState.update {
                         it.copy(
-                            executionStatus = ExecutionStatus.FAIL,
+                            verificationStatus = VerificationStatus.FAIL,
                             verificationMessage = "Failed to approve property",
                             propertyVerified = false
                         )
@@ -141,7 +148,7 @@ class PropertyDetailsScreenViewModel(
             }catch (e: Exception) {
                 _uiState.update {
                     it.copy(
-                        executionStatus = ExecutionStatus.FAIL,
+                        verificationStatus = VerificationStatus.FAIL,
                         verificationMessage = "Failed. Check your connection",
                         propertyVerified = false
                     )
@@ -154,7 +161,7 @@ class PropertyDetailsScreenViewModel(
     fun rejectProperty() {
         _uiState.update {
             it.copy(
-                executionStatus = ExecutionStatus.LOADING
+                verificationStatus = VerificationStatus.LOADING
             )
         }
         var imagesId = mutableListOf<Int>()
@@ -175,7 +182,7 @@ class PropertyDetailsScreenViewModel(
                     _uiState.update {
                         it.copy(
                             propertyUnVerified = true,
-                            executionStatus = ExecutionStatus.SUCCESS
+                            verificationStatus = VerificationStatus.SUCCESS
                         )
                     }
                     Log.i("PROPERTY_UNVERIFICATION", "SUCCESS")
@@ -184,7 +191,7 @@ class PropertyDetailsScreenViewModel(
                         it.copy(
                             propertyUnVerified = false,
                             verificationMessage = "Failed to disapprove property",
-                            executionStatus = ExecutionStatus.FAIL
+                            verificationStatus = VerificationStatus.FAIL
                         )
                     }
                     Log.e("PROPERTY_UNVERIFICATION_FAILURE_RESPONSE", response.toString())
@@ -194,7 +201,7 @@ class PropertyDetailsScreenViewModel(
                     it.copy(
                         propertyUnVerified = false,
                         verificationMessage = "Failed.Check your connection",
-                        executionStatus = ExecutionStatus.FAIL
+                        verificationStatus = VerificationStatus.FAIL
                     )
                 }
                 Log.e("PROPERTY_UNVERIFICATION_FAILURE_EXCEPTION", e.toString())
@@ -205,7 +212,7 @@ class PropertyDetailsScreenViewModel(
     fun resetVerificationStatus() {
         _uiState.update {
             it.copy(
-                executionStatus = ExecutionStatus.INITIAL,
+                verificationStatus = VerificationStatus.INITIAL,
                 propertyVerified = false,
                 propertyUnVerified = false
             )

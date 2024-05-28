@@ -126,12 +126,18 @@ val unapprovedProperties = listOf<PropertyDetails>(
 @Composable
 fun UnverifiedPropertiesScreenComposable(
     navigateToHomeScreenWithoutArgs: () -> Unit,
+    navigateToLoginScreenWithArgs: (phoneNumber: String, password: String) -> Unit,
     navigateToSpecificPropertyScreen: (propertyId: String) -> Unit,
 ){
     val viewModel: UnverifiedPropertiesScreenViewModel = viewModel(factory = AppViewModelFactory.Factory)
     val uiState by viewModel.uiState.collectAsState()
 
     BackHandler(onBack = navigateToHomeScreenWithoutArgs)
+
+    if(uiState.executionStatus == ExecutionStatus.FAIL && uiState.forceLogin) {
+        navigateToLoginScreenWithArgs(uiState.userDetails.phoneNumber, uiState.userDetails.password)
+        viewModel.resetExecutionStatus()
+    }
 
     Box {
         UnverifiedPropertiesScreen(

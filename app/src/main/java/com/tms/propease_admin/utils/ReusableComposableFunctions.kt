@@ -695,6 +695,7 @@ fun PropertyImages(
 fun PropertyInfo(
     property: PropertyDetails,
     executionStatus: ExecutionStatus,
+    verificationStatus: VerificationStatus,
     onVerifyPropertyClicked: () -> Unit,
     onRejectPropertyClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -914,7 +915,7 @@ fun PropertyInfo(
         if(!property.approved) {
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                enabled = executionStatus != ExecutionStatus.LOADING,
+                enabled = verificationStatus != VerificationStatus.LOADING,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Black
                 ),
@@ -924,7 +925,7 @@ fun PropertyInfo(
                     onVerifyPropertyClicked()
                 }
             ) {
-                if(executionStatus == ExecutionStatus.LOADING) {
+                if(verificationStatus == VerificationStatus.LOADING) {
                     CircularProgressIndicator()
                 } else {
                     Text(text = "Verify")

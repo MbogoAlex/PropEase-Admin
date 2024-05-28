@@ -35,6 +35,7 @@ import com.tms.propease_admin.ui.theme.PropEaseAdminTheme
 import com.tms.propease_admin.utils.ExecutionStatus
 import com.tms.propease_admin.utils.PropertyImages
 import com.tms.propease_admin.utils.PropertyInfo
+import com.tms.propease_admin.utils.VerificationStatus
 
 val property = PropertyDetails(
     user = propertyOwner,
@@ -78,15 +79,15 @@ fun PropertyDetailsScreenComposable(
         mutableStateOf(false)
     }
 
-    if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyVerified) {
+    if(uiState.verificationStatus == VerificationStatus.SUCCESS && uiState.propertyVerified) {
         Toast.makeText(context, "Property verified", Toast.LENGTH_SHORT).show()
         navigateToHomeScreenWithoutArgs()
         viewModel.resetVerificationStatus()
-    } else if(uiState.executionStatus == ExecutionStatus.SUCCESS && uiState.propertyUnVerified) {
+    } else if(uiState.verificationStatus == VerificationStatus.SUCCESS && uiState.propertyUnVerified) {
         Toast.makeText(context, "Property unverified", Toast.LENGTH_SHORT).show()
         navigateToHomeScreenWithArgs("unverified-properties-screen")
         viewModel.resetVerificationStatus()
-    } else if(uiState.executionStatus == ExecutionStatus.FAIL) {
+    } else if(uiState.verificationStatus == VerificationStatus.FAIL) {
         Toast.makeText(context, uiState.verificationMessage, Toast.LENGTH_SHORT).show()
         viewModel.resetVerificationStatus()
     }
@@ -163,6 +164,7 @@ fun PropertyDetailsScreenComposable(
             property = uiState.property,
             navigateToPreviousScreen = navigateToPreviousScreen,
             executionStatus = uiState.executionStatus,
+            verificationStatus = uiState.verificationStatus,
             onVerifyPropertyClicked = {
                 approvePropertyDialog = true
             },
@@ -177,6 +179,7 @@ fun PropertyDetailsScreenComposable(
 fun PropertyDetailsScreen(
     property: PropertyDetails,
     executionStatus: ExecutionStatus,
+    verificationStatus: VerificationStatus,
     navigateToPreviousScreen: () -> Unit,
     onVerifyPropertyClicked: () -> Unit,
     onRejectPropertyClicked: () -> Unit,
@@ -208,6 +211,7 @@ fun PropertyDetailsScreen(
         PropertyInfo(
             property = property,
             executionStatus = executionStatus,
+            verificationStatus = verificationStatus,
             onVerifyPropertyClicked = onVerifyPropertyClicked,
             onRejectPropertyClicked = onRejectPropertyClicked
         )
@@ -225,6 +229,7 @@ fun PropertyDetailsScreenPreview() {
         PropertyDetailsScreen(
             property = property,
             executionStatus = ExecutionStatus.INITIAL,
+            verificationStatus = VerificationStatus.INITIAL,
             navigateToPreviousScreen = {},
             onVerifyPropertyClicked = {},
             onRejectPropertyClicked = {}
